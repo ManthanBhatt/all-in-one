@@ -1,0 +1,23 @@
+{
+  "name": "Freelancer OS",
+  "short_name": "Freelancer OS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1118",
+  "theme_color": "#0a1118",
+  "description": "Offline-first freelancer workspace for clients, projects, tasks, notes, reminders, time tracking, and invoices.",
+  "icons": [
+    {
+      "src": "assets/icon/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/brand/logo-mark.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,390 @@
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+html,
+body,
+ion-app,
+ion-content {
+  background: var(--app-bg);
+  color: var(--app-copy);
+}
+
+body {
+  letter-spacing: -0.01em;
+}
+
+ion-toolbar {
+  --background: rgba(15, 22, 29, 0.72);
+  --border-color: transparent;
+  --color: var(--app-copy);
+  backdrop-filter: blur(18px);
+}
+
+ion-title {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+ion-content::part(background) {
+  background: var(--app-bg);
+}
+
+ion-button {
+  --border-radius: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.workspace-page {
+  padding: 1.25rem;
+}
+
+.workspace-hero {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: var(--app-radius-xl);
+  background:
+    radial-gradient(circle at top right, rgba(241, 199, 91, 0.22), transparent 34%),
+    linear-gradient(135deg, rgba(17, 26, 35, 0.98), rgba(18, 56, 61, 0.95));
+  color: #f4f8fb;
+  box-shadow: var(--app-shadow-lg);
+  overflow: hidden;
+}
+
+.workspace-hero h1,
+.workspace-hero h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.workspace-hero p {
+  color: rgba(244, 248, 251, 0.72);
+  max-width: 42rem;
+}
+
+.workspace-hero__eyebrow,
+.section-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: #f1c75b;
+}
+
+.workspace-hero__meta {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.hero-highlight {
+  padding: 1rem;
+  border-radius: var(--app-radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-highlight strong,
+.hero-highlight span {
+  display: block;
+}
+
+.hero-highlight strong {
+  font-size: 1.6rem;
+  margin-top: 0.2rem;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.workspace-grid--compact {
+  margin-top: 0;
+}
+
+.workspace-card {
+  grid-column: span 12;
+  padding: 1.1rem;
+  border-radius: var(--app-radius-lg);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow-md);
+  backdrop-filter: blur(14px);
+}
+
+.workspace-card--span-4 { grid-column: span 4; }
+.workspace-card--span-6 { grid-column: span 6; }
+.workspace-card--span-8 { grid-column: span 8; }
+
+.workspace-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 0.85rem;
+}
+
+.workspace-card__title {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.workspace-card__value {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.workspace-card__hint {
+  color: var(--app-copy-muted);
+  margin: 0.3rem 0 0;
+}
+
+.collection {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.collection-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface-strong);
+  border: 1px solid var(--app-border);
+}
+
+.collection-item__title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.collection-item__meta {
+  margin: 0.3rem 0 0;
+  color: var(--app-copy-muted);
+  font-size: 0.95rem;
+}
+
+.collection-item__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.5rem;
+  padding: 0.38rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 122, 89, 0.12);
+  color: var(--ion-color-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.collection-item__badge--success {
+  background: rgba(56, 194, 125, 0.14);
+  color: #7cf0ae;
+}
+
+.collection-item__badge--warning {
+  background: rgba(243, 198, 111, 0.14);
+  color: #ffd486;
+}
+
+.collection-item__badge--danger {
+  background: rgba(255, 107, 107, 0.14);
+  color: #ff9e9e;
+}
+
+.collection-item__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.empty-state {
+  padding: 1rem;
+  border-radius: var(--app-radius-md);
+  background: rgba(61, 198, 181, 0.08);
+  color: var(--app-copy-muted);
+}
+
+.page-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.soft-button {
+  --background: rgba(255, 255, 255, 0.08);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --color: #f4f8fb;
+}
+
+.surface-button {
+  --background: var(--app-surface-strong);
+  --color: var(--app-copy);
+  --box-shadow: none;
+  --border-color: var(--app-border);
+}
+
+.workspace-form {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.workspace-form__field { grid-column: span 12; }
+.workspace-form__field--half { grid-column: span 6; }
+.workspace-form__field--third { grid-column: span 4; }
+.workspace-form label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #c7d3de;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.workspace-form input,
+.workspace-form textarea,
+.workspace-form select {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111922;
+  color: #f3f7fb;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  outline: none;
+}
+
+.workspace-form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.workspace-form input::placeholder,
+.workspace-form textarea::placeholder {
+  color: #738394;
+}
+
+.workspace-form input:focus,
+.workspace-form textarea:focus,
+.workspace-form select:focus {
+  border-color: rgba(61, 198, 181, 0.72);
+  box-shadow: 0 0 0 3px rgba(61, 198, 181, 0.14);
+}
+
+.workspace-form__actions {
+  grid-column: span 12;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.link-tile {
+  padding: 1rem;
+  border-radius: var(--app-radius-md);
+  text-decoration: none;
+  background: var(--app-surface-strong);
+  border: 1px solid var(--app-border);
+  color: var(--app-copy);
+}
+
+.link-tile strong,
+.link-tile span {
+  display: block;
+}
+
+.link-tile span {
+  margin-top: 0.3rem;
+  color: var(--app-copy-muted);
+  font-size: 0.88rem;
+}
+
+ion-modal.workspace-modal {
+  --backdrop-opacity: 0.74;
+  --height: auto;
+  --width: min(40rem, calc(100vw - 2rem));
+  --border-radius: 28px;
+  --box-shadow: none;
+}
+
+ion-modal.workspace-modal::part(backdrop) {
+  background: rgba(4, 8, 13, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+ion-modal.workspace-modal::part(content) {
+  background: transparent;
+  box-shadow: none;
+}
+
+.workspace-modal__card {
+  margin: 0 auto;
+  width: min(40rem, calc(100vw - 2rem));
+  border-radius: 28px;
+  background: linear-gradient(180deg, #131c25 0%, #0f151d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 36px 80px rgba(0, 0, 0, 0.46);
+  overflow: hidden;
+}
+
+.workspace-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.workspace-modal__header .workspace-card__title {
+  font-size: 1.45rem;
+  color: #f6f9fc;
+}
+
+.workspace-modal__body {
+  padding: 1.25rem;
+}
+
+@media (max-width: 960px) {
+  .workspace-hero { grid-template-columns: 1fr; }
+  .workspace-card--span-4,
+  .workspace-card--span-6,
+  .workspace-card--span-8,
+  .workspace-form__field--half,
+  .workspace-form__field--third { grid-column: span 12; }
+  .link-grid { grid-template-columns: 1fr 1fr; }
+  .collection-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .collection-item__actions {
+    justify-content: flex-start;
+  }
+}
+

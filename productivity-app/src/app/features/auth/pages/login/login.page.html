@@ -1,0 +1,77 @@
+<ion-content fullscreen>
+  <div class="auth-page auth-page--login">
+    <div class="auth-backdrop auth-backdrop--sun"></div>
+    <div class="auth-grid">
+      <section class="auth-story" *ngIf="!isSmallScreen">
+        <img src="assets/brand/logo-lockup.svg" alt="Freelancer OS" class="auth-brand-mark">
+        <div class="auth-brand">Freelancer OS</div>
+        <h1>Run clients, delivery, billing, and follow-ups from one calm workspace.</h1>
+        <p>
+          Local-first workflows for notes, tasks, reminders, invoices, and project control across web, Android, and iOS.
+        </p>
+
+        <div class="feature-strip">
+          <article>
+            <span>Offline-first</span>
+            <strong>Write now, sync later</strong>
+          </article>
+          <article>
+            <span>Client ops</span>
+            <strong>Projects, tasks, invoices</strong>
+          </article>
+          <article>
+            <span>Built for you</span>
+            <strong>Solo dev workflow, not team bloat</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="auth-panel">
+        <div class="auth-panel__header">
+          <p class="eyebrow">Welcome back</p>
+          <h2>Sign in</h2>
+          <p>Use your account to unlock local data, sync, and your client workspace.</p>
+        </div>
+
+        <p *ngIf="isDevFallback" class="hint-banner">
+          Supabase is not configured. Development fallback auth is active locally.
+        </p>
+
+        <label class="field">
+          <span>Email</span>
+          <ion-input
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event ?? '')"
+            type="email"
+            fill="outline"
+            placeholder="you@studio.dev"
+          ></ion-input>
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <ion-input
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event ?? '')"
+            type="password"
+            fill="outline"
+            placeholder="Enter your password"
+          ></ion-input>
+        </label>
+
+        <ion-text color="danger" *ngIf="errorMessage() as error">
+          <p class="form-error">{{ error }}</p>
+        </ion-text>
+
+        <ion-button expand="block" class="auth-cta" (click)="signIn()" [disabled]="isBusy()">
+          {{ isBusy() ? 'Signing in...' : 'Open workspace' }}
+        </ion-button>
+
+        <div class="auth-switch">
+          <span>New here?</span>
+          <a routerLink="/auth/register">Create an account</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</ion-content>

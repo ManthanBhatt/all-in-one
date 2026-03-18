@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Notes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Notes</p>
+            <h3 class="workspace-card__title">Captured context</h3>
+            <p class="workspace-card__hint">Keep meeting notes, requirements, and snippets close to the work they shape.</p>
+          </div>
+          <div class="workspace-card__value">{{ facade.notes().length }}</div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Notebook</p>
+            <h3 class="workspace-card__title">Recent notes</h3>
+          </div>
+          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add note</ion-button>
+        </div>
+
+        <div class="collection" *ngIf="facade.notes().length; else emptyState">
+          <div class="collection-item" *ngFor="let note of facade.notes()">
+            <div>
+              <p class="collection-item__title">{{ note.title || 'Quick note' }}</p>
+              <p class="collection-item__meta">{{ note.body }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <ion-button size="small" fill="clear" (click)="openEdit(note)">Edit</ion-button>
+              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(note.id)">Delete</ion-button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">No notes yet.</div>
+        </ng-template>
+      </article>
+    </section>
+  </div>
+
+  <ion-modal [isOpen]="isModalOpen()" class="workspace-modal" (didDismiss)="closeModal()">
+    <ng-template>
+      <div class="workspace-modal__card">
+        <div class="workspace-modal__header">
+          <div>
+            <p class="section-eyebrow">{{ editingId() ? 'Edit' : 'Create' }}</p>
+            <h3 class="workspace-card__title">{{ editingId() ? 'Edit note' : 'New note' }}</h3>
+          </div>
+          <ion-button fill="clear" color="medium" (click)="closeModal()">Close</ion-button>
+        </div>
+        <div class="workspace-modal__body">
+          <div class="workspace-form">
+            <div class="workspace-form__field">
+              <label>Title</label>
+              <input [ngModel]="title()" (ngModelChange)="title.set($event ?? '')" placeholder="Sprint review">
+            </div>
+            <div class="workspace-form__field">
+              <label>Body</label>
+              <textarea [ngModel]="body()" (ngModelChange)="body.set($event ?? '')" placeholder="Key decisions, todos, blockers..."></textarea>
+            </div>
+            <div class="workspace-form__actions">
+              <ion-button (click)="save()">{{ editingId() ? 'Update note' : 'Save note' }}</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

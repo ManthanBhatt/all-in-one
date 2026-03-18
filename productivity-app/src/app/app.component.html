@@ -1,0 +1,26 @@
+<ion-app>
+  <ion-router-outlet></ion-router-outlet>
+
+  <div class="app-lock" *ngIf="appLock.isLocked()">
+    <div class="app-lock__card">
+      <img src="assets/brand/logo-mark.svg" alt="Freelancer OS" class="app-lock__logo">
+      <p class="app-lock__eyebrow">Security</p>
+      <h2>Unlock Freelancer OS</h2>
+      <p class="app-lock__copy">This workspace is protected. Enter your PIN to continue.</p>
+
+      <label class="app-lock__field" *ngIf="appLock.hasWebPin()">
+        <span>PIN</span>
+        <ion-input [ngModel]="pin()" (ngModelChange)="pin.set($event ?? '')" type="password" inputmode="numeric" placeholder="Enter PIN"></ion-input>
+      </label>
+
+      <ion-text color="danger" *ngIf="appLock.errorMessage() as error">
+        <p class="app-lock__error">{{ error }}</p>
+      </ion-text>
+
+      <div class="app-lock__actions">
+        <ion-button *ngIf="appLock.hasWebPin()" (click)="unlock()">Unlock</ion-button>
+        <ion-button *ngIf="appLock.isNative && appLock.useDeviceSecurity()" fill="outline" (click)="useDeviceSecurity()">Use device unlock</ion-button>
+      </div>
+    </div>
+  </div>
+</ion-app>

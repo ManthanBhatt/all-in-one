@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Projects</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Projects</p>
+            <h3 class="workspace-card__title">Delivery overview</h3>
+            <p class="workspace-card__hint">Each project shows its current status and the last five linked tasks.</p>
+          </div>
+          <ion-button fill="outline" class="surface-button" (click)="openCreate()" [disabled]="!clientsFacade.clients().length">Add project</ion-button>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12" *ngIf="!clientsFacade.clients().length">
+        <div class="empty-state">
+          Create a client first, then add a project.
+          <div class="page-actions">
+            <ion-button routerLink="/app/clients">Go to clients</ion-button>
+          </div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-4" *ngFor="let project of facade.projects()">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">{{ clientName(project.client_id) }}</p>
+            <h3 class="workspace-card__title">{{ project.name }}</h3>
+            <p class="workspace-card__hint">Latest linked work and project status.</p>
+          </div>
+          <span class="collection-item__badge">{{ project.status.replace('_', ' ') }}</span>
+        </div>
+
+        <div class="project-status-row">
+          <label>Status</label>
+          <select [ngModel]="project.status" (ngModelChange)="onStatusChange(project, $event)">
+            <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ statusOption.replace('_', ' ') }}</option>
+          </select>
+        </div>
+
+        <div class="project-subsection ion-margin-top">
+          <span class="project-subsection__label">Last 5 tasks</span>
+          <div class="project-task-chip" *ngFor="let task of projectTasks(project.id)">
+            <span>{{ task.title }}</span>
+            <span class="collection-item__badge" [class.collection-item__badge--success]="tasksFacade.taskStateTone(task) === 'success'" [class.collection-item__badge--warning]="tasksFacade.taskStateTone(task) === 'warning'" [class.collection-item__badge--danger]="tasksFacade.taskStateTone(task) === 'danger'">{{ tasksFacade.taskStateLabel(task) }}</span>
+          </div>
+          <div class="empty-state" *ngIf="!projectTasks(project.id).length">No linked tasks yet.</div>
+        </div>
+
+        <div class="page-actions">
+          <ion-button fill="outline" class="surface-button" [routerLink]="'/app/tasks'">Show more</ion-button>
+          <ion-button fill="clear" (click)="openEdit(project)">Edit</ion-button>
+          <ion-button fill="clear" color="danger" (click)="facade.remove(project.id)">Delete</ion-button>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12" *ngIf="!facade.projects().length && clientsFacade.clients().length">
+        <div class="empty-state">No projects yet.</div>
+      </article>
+    </section>
+  </div>
+
+  <ion-modal [isOpen]="isProjectModalOpen()" class="workspace-modal" (didDismiss)="closeProjectModal()">
+    <ng-template>
+      <div class="workspace-modal__card">
+        <div class="workspace-modal__header">
+          <div>
+            <p class="section-eyebrow">{{ editingId() ? 'Edit' : 'Create' }}</p>
+            <h3 class="workspace-card__title">{{ editingId() ? 'Edit project' : 'New project' }}</h3>
+          </div>
+          <ion-button fill="clear" color="medium" (click)="closeProjectModal()">Close</ion-button>
+        </div>
+        <div class="workspace-modal__body">
+          <div class="workspace-form">
+            <div class="workspace-form__field">
+              <label>Project name</label>
+              <input [ngModel]="name()" (ngModelChange)="name.set($event ?? '')" placeholder="Client portal rebuild">
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Client</label>
+              <select [ngModel]="clientId()" (ngModelChange)="clientId.set($event ?? '')">
+                <option value="">Select client</option>
+                <option *ngFor="let client of clientsFacade.clients()" [value]="client.id">{{ client.name }}</option>
+              </select>
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Status</label>
+              <select [ngModel]="status()" (ngModelChange)="status.set($event)">
+                <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ statusOption.replace('_', ' ') }}</option>
+              </select>
+            </div>
+            <div class="empty-state" *ngIf="errorMessage() as error">{{ error }}</div>
+            <div class="workspace-form__actions">
+              <ion-button (click)="saveProject()">{{ editingId() ? 'Update project' : 'Save project' }}</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

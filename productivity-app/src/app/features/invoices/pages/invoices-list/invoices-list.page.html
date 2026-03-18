@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Invoices</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Invoices</p>
+            <h3 class="workspace-card__title">Billing ledger</h3>
+            <p class="workspace-card__hint">Draft, update, and settle invoices without leaving your workspace.</p>
+          </div>
+          <div class="workspace-card__value">{{ facade.unpaidInvoices().length }}</div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Ledger</p>
+            <h3 class="workspace-card__title">Invoice list</h3>
+          </div>
+          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add invoice</ion-button>
+        </div>
+
+        <div class="collection" *ngIf="facade.invoices().length; else emptyState">
+          <div class="collection-item" *ngFor="let invoice of facade.invoices()">
+            <div>
+              <p class="collection-item__title">{{ invoice.invoice_number }}</p>
+              <p class="collection-item__meta">{{ invoice.total_amount | currency:'INR':'symbol':'1.0-0' }} - Due {{ invoice.due_date | date:'mediumDate' }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge">{{ invoice.status }}</span>
+              <ion-button size="small" fill="clear" (click)="facade.markPaid(invoice)">{{ invoice.status === 'paid' ? 'Unpay' : 'Paid' }}</ion-button>
+              <ion-button size="small" fill="clear" (click)="openEdit(invoice)">Edit</ion-button>
+              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(invoice.id)">Delete</ion-button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">No invoices yet.</div>
+        </ng-template>
+      </article>
+    </section>
+  </div>
+
+  <ion-modal [isOpen]="isModalOpen()" class="workspace-modal" (didDismiss)="closeModal()">
+    <ng-template>
+      <div class="workspace-modal__card">
+        <div class="workspace-modal__header">
+          <div>
+            <p class="section-eyebrow">{{ editingInvoice() ? 'Edit' : 'Create' }}</p>
+            <h3 class="workspace-card__title">{{ editingInvoice() ? 'Edit invoice' : 'New invoice' }}</h3>
+          </div>
+          <ion-button fill="clear" color="medium" (click)="closeModal()">Close</ion-button>
+        </div>
+        <div class="workspace-modal__body">
+          <div class="workspace-form">
+            <div class="workspace-form__field--half">
+              <label>Invoice number</label>
+              <input [ngModel]="invoiceNumber()" (ngModelChange)="invoiceNumber.set($event ?? '')" placeholder="Optional auto-generate">
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Due date</label>
+              <input type="date" [ngModel]="dueDate()" (ngModelChange)="dueDate.set($event ?? '')">
+            </div>
+            <div class="workspace-form__field">
+              <label>Description</label>
+              <input [ngModel]="description()" (ngModelChange)="description.set($event ?? '')" placeholder="Frontend sprint">
+            </div>
+            <div class="workspace-form__field">
+              <label>Amount</label>
+              <input type="number" [ngModel]="amount()" (ngModelChange)="amount.set(($event ?? 0))">
+            </div>
+            <div class="workspace-form__actions">
+              <ion-button (click)="save()">{{ editingInvoice() ? 'Update invoice' : 'Create invoice' }}</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

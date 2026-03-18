@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Reminders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Reminders</p>
+            <h3 class="workspace-card__title">Follow-up schedule</h3>
+            <p class="workspace-card__hint">Create reminders that can notify you in the browser or on-device when permission is available.</p>
+          </div>
+          <div class="workspace-card__value">{{ facade.upcoming().length }}</div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Schedule</p>
+            <h3 class="workspace-card__title">Reminder timeline</h3>
+          </div>
+          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add reminder</ion-button>
+        </div>
+
+        <div class="collection" *ngIf="facade.reminders().length; else emptyState">
+          <div class="collection-item" *ngFor="let reminder of facade.reminders()">
+            <div>
+              <p class="collection-item__title">{{ reminder.title }}</p>
+              <p class="collection-item__meta">{{ reminder.remind_at | date:'medium' }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge" [class.collection-item__badge--success]="facade.reminderStateTone(reminder) === 'success'" [class.collection-item__badge--warning]="facade.reminderStateTone(reminder) === 'warning'" [class.collection-item__badge--danger]="facade.reminderStateTone(reminder) === 'danger'">{{ facade.reminderStateLabel(reminder) }}</span>
+              <ion-button size="small" fill="clear" [disabled]="facade.reminderStateLabel(reminder) === 'completed'" (click)="facade.complete(reminder)">Complete</ion-button>
+              <ion-button size="small" fill="clear" (click)="openEdit(reminder)">Edit</ion-button>
+              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(reminder.id)">Delete</ion-button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">No reminders scheduled.</div>
+        </ng-template>
+      </article>
+    </section>
+  </div>
+
+  <ion-modal [isOpen]="isModalOpen()" class="workspace-modal" (didDismiss)="closeModal()">
+    <ng-template>
+      <div class="workspace-modal__card">
+        <div class="workspace-modal__header">
+          <div>
+            <p class="section-eyebrow">{{ editingId() ? 'Edit' : 'Create' }}</p>
+            <h3 class="workspace-card__title">{{ editingId() ? 'Edit reminder' : 'New reminder' }}</h3>
+          </div>
+          <ion-button fill="clear" color="medium" (click)="closeModal()">Close</ion-button>
+        </div>
+        <div class="workspace-modal__body">
+          <div class="workspace-form">
+            <div class="workspace-form__field">
+              <label>Title</label>
+              <input [ngModel]="title()" (ngModelChange)="title.set($event ?? '')" placeholder="Follow up on proposal">
+            </div>
+            <div class="workspace-form__field">
+              <label>Remind at</label>
+              <input type="datetime-local" [ngModel]="remindAt()" (ngModelChange)="remindAt.set($event ?? '')">
+            </div>
+            <div class="workspace-form__actions">
+              <ion-button (click)="save()">{{ editingId() ? 'Update reminder' : 'Save reminder' }}</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

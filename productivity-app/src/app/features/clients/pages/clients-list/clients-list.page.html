@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Clients</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Clients</p>
+            <h3 class="workspace-card__title">Relationship directory</h3>
+            <p class="workspace-card__hint">Keep account details, billing contacts, and delivery context in one list.</p>
+          </div>
+          <div class="workspace-card__value">{{ facade.activeCount() }}</div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Directory</p>
+            <h3 class="workspace-card__title">All clients</h3>
+          </div>
+          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add client</ion-button>
+        </div>
+
+        <div class="collection" *ngIf="facade.clients().length; else emptyState">
+          <div class="collection-item" *ngFor="let client of facade.clients()">
+            <div>
+              <p class="collection-item__title">{{ client.name }}</p>
+              <p class="collection-item__meta">{{ client.company_name || 'Independent client' }}<span *ngIf="client.email"> - {{ client.email }}</span></p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge">{{ client.status }}</span>
+              <ion-button size="small" fill="clear" (click)="openEdit(client)">Edit</ion-button>
+              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(client.id)">Delete</ion-button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">No clients yet. Add your first client to unlock projects and invoices.</div>
+        </ng-template>
+      </article>
+    </section>
+  </div>
+
+  <ion-modal [isOpen]="isModalOpen()" class="workspace-modal" (didDismiss)="closeModal()">
+    <ng-template>
+      <div class="workspace-modal__card">
+        <div class="workspace-modal__header">
+          <div>
+            <p class="section-eyebrow">{{ editingId() ? 'Edit' : 'Create' }}</p>
+            <h3 class="workspace-card__title">{{ editingId() ? 'Edit client' : 'New client' }}</h3>
+          </div>
+          <ion-button fill="clear" color="medium" (click)="closeModal()">Close</ion-button>
+        </div>
+        <div class="workspace-modal__body">
+          <div class="workspace-form">
+            <div class="workspace-form__field">
+              <label>Name</label>
+              <input [ngModel]="name()" (ngModelChange)="name.set($event ?? '')" placeholder="Acme Corp">
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Company</label>
+              <input [ngModel]="company()" (ngModelChange)="company.set($event ?? '')" placeholder="Acme Studio">
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Email</label>
+              <input [ngModel]="email()" (ngModelChange)="email.set($event ?? '')" placeholder="hello@acme.dev">
+            </div>
+            <div class="workspace-form__actions">
+              <ion-button (click)="save()">{{ editingId() ? 'Update client' : 'Save client' }}</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

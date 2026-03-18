@@ -1,0 +1,209 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Tasks</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <div class="ion-display-flex ion-justify-content-between ion-align-items-center">
+              <span class="section-eyebrow">Tasks</span>
+              <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add task</ion-button>
+            </div>
+            <h3 class="workspace-card__title">Task workflow</h3>
+            <p class="workspace-card__hint">Create general tasks or attach them to projects so delivery work stays connected. Drag cards between columns to update status.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-4 task-lane" [class.task-lane--active]="dropStatus() === 'planning'" (dragover)="onDragOver($event, 'planning')" (dragleave)="onDragLeave('planning')" (drop)="onDrop('planning')">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Planning</p>
+            <h3 class="workspace-card__title">Ready to start</h3>
+          </div>
+          <span class="collection-item__badge collection-item__badge--warning">{{ facade.planningTasks().length }}</span>
+        </div>
+        <div class="collection collection--stack" *ngIf="facade.planningTasks().length; else emptyPlanning">
+          <div class="collection-item collection-item--project task-card" draggable="true" (dragstart)="onDragStart(task)" (dragend)="onDragEnd()" *ngFor="let task of facade.planningTasks()">
+            <div class="collection-item__block">
+              <p class="collection-item__title">{{ task.title }}</p>
+              <p class="collection-item__meta">{{ projectName(task.project_id) }} - {{ clientName(task.client_id) }}</p>
+              <p class="collection-item__meta">{{ task.due_at ? (task.due_at | date:'medium') : 'No due date' }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge collection-item__badge--warning">{{ facade.taskStateLabel(task) }}</span>
+              <select class="task-inline-select" [ngModel]="task.status" (ngModelChange)="facade.setStatus(task, $event)">
+                <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ facade.formatStatus(statusOption) }}</option>
+              </select>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(task)"><ion-icon slot="icon-only" [icon]="createIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(task.id)"><ion-icon slot="icon-only" [icon]="trashIcon"></ion-icon></ion-button>
+            </div>
+          </div>
+        </div>
+        <ng-template #emptyPlanning><div class="empty-state">No planning tasks.</div></ng-template>
+      </article>
+
+      <article class="workspace-card workspace-card--span-4 task-lane" [class.task-lane--active]="dropStatus() === 'in_flight'" (dragover)="onDragOver($event, 'in_flight')" (dragleave)="onDragLeave('in_flight')" (drop)="onDrop('in_flight')">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">In flight</p>
+            <h3 class="workspace-card__title">Execution</h3>
+          </div>
+          <span class="collection-item__badge">{{ facade.inFlightTasks().length }}</span>
+        </div>
+        <div class="collection collection--stack" *ngIf="facade.inFlightTasks().length; else emptyFlight">
+          <div class="collection-item collection-item--project task-card" draggable="true" (dragstart)="onDragStart(task)" (dragend)="onDragEnd()" *ngFor="let task of facade.inFlightTasks()">
+            <div class="collection-item__block">
+              <p class="collection-item__title">{{ task.title }}</p>
+              <p class="collection-item__meta">{{ projectName(task.project_id) }} - {{ clientName(task.client_id) }}</p>
+              <p class="collection-item__meta">{{ task.due_at ? (task.due_at | date:'medium') : 'No due date' }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge" [class.collection-item__badge--danger]="facade.taskStateTone(task) === 'danger'">{{ facade.taskStateLabel(task) }}</span>
+              <select class="task-inline-select" [ngModel]="task.status" (ngModelChange)="facade.setStatus(task, $event)">
+                <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ facade.formatStatus(statusOption) }}</option>
+              </select>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(task)"><ion-icon slot="icon-only" [icon]="createIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(task.id)"><ion-icon slot="icon-only" [icon]="trashIcon"></ion-icon></ion-button>
+            </div>
+          </div>
+        </div>
+        <ng-template #emptyFlight><div class="empty-state">No tasks in flight.</div></ng-template>
+      </article>
+
+      <article class="workspace-card workspace-card--span-4 task-lane" [class.task-lane--active]="dropStatus() === 'on_hold'" (dragover)="onDragOver($event, 'on_hold')" (dragleave)="onDragLeave('on_hold')" (drop)="onDrop('on_hold')">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">On hold</p>
+            <h3 class="workspace-card__title">Paused work</h3>
+          </div>
+          <span class="collection-item__badge">{{ facade.onHoldTasks().length }}</span>
+        </div>
+        <div class="collection collection--stack" *ngIf="facade.onHoldTasks().length; else emptyHold">
+          <div class="collection-item collection-item--project task-card" draggable="true" (dragstart)="onDragStart(task)" (dragend)="onDragEnd()" *ngFor="let task of facade.onHoldTasks()">
+            <div class="collection-item__block">
+              <p class="collection-item__title">{{ task.title }}</p>
+              <p class="collection-item__meta">{{ projectName(task.project_id) }} - {{ clientName(task.client_id) }}</p>
+              <p class="collection-item__meta">{{ task.due_at ? (task.due_at | date:'medium') : 'No due date' }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge">{{ facade.taskStateLabel(task) }}</span>
+              <select class="task-inline-select" [ngModel]="task.status" (ngModelChange)="facade.setStatus(task, $event)">
+                <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ facade.formatStatus(statusOption) }}</option>
+              </select>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(task)"><ion-icon slot="icon-only" [icon]="createIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(task.id)"><ion-icon slot="icon-only" [icon]="trashIcon"></ion-icon></ion-button>
+            </div>
+          </div>
+        </div>
+        <ng-template #emptyHold><div class="empty-state">No on-hold tasks.</div></ng-template>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6 task-lane" [class.task-lane--active]="dropStatus() === 'in_review'" (dragover)="onDragOver($event, 'in_review')" (dragleave)="onDragLeave('in_review')" (drop)="onDrop('in_review')">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">In review</p>
+            <h3 class="workspace-card__title">Waiting for approval</h3>
+          </div>
+          <span class="collection-item__badge collection-item__badge--warning">{{ facade.inReviewTasks().length }}</span>
+        </div>
+        <div class="collection collection--stack" *ngIf="facade.inReviewTasks().length; else emptyReview">
+          <div class="collection-item collection-item--project task-card" draggable="true" (dragstart)="onDragStart(task)" (dragend)="onDragEnd()" *ngFor="let task of facade.inReviewTasks()">
+            <div class="collection-item__block">
+              <p class="collection-item__title">{{ task.title }}</p>
+              <p class="collection-item__meta">{{ projectName(task.project_id) }} - {{ clientName(task.client_id) }}</p>
+              <p class="collection-item__meta">{{ task.due_at ? (task.due_at | date:'medium') : 'No due date' }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge collection-item__badge--warning">{{ facade.taskStateLabel(task) }}</span>
+              <select class="task-inline-select" [ngModel]="task.status" (ngModelChange)="facade.setStatus(task, $event)">
+                <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ facade.formatStatus(statusOption) }}</option>
+              </select>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(task)"><ion-icon slot="icon-only" [icon]="createIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(task.id)"><ion-icon slot="icon-only" [icon]="trashIcon"></ion-icon></ion-button>
+            </div>
+          </div>
+        </div>
+        <ng-template #emptyReview><div class="empty-state">No tasks in review.</div></ng-template>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6 task-lane" [class.task-lane--active]="dropStatus() === 'complete'" (dragover)="onDragOver($event, 'complete')" (dragleave)="onDragLeave('complete')" (drop)="onDrop('complete')">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Complete</p>
+            <h3 class="workspace-card__title">Finished work</h3>
+          </div>
+          <span class="collection-item__badge collection-item__badge--success">{{ facade.completeTasks().length }}</span>
+        </div>
+        <div class="collection collection--stack" *ngIf="facade.completeTasks().length; else emptyComplete">
+          <div class="collection-item collection-item--project task-card" draggable="true" (dragstart)="onDragStart(task)" (dragend)="onDragEnd()" *ngFor="let task of facade.completeTasks()">
+            <div class="collection-item__block">
+              <p class="collection-item__title">{{ task.title }}</p>
+              <p class="collection-item__meta">{{ projectName(task.project_id) }} - {{ clientName(task.client_id) }}</p>
+              <p class="collection-item__meta">{{ task.completed_at ? ('Completed ' + (task.completed_at | date:'mediumDate')) : 'Completed' }}</p>
+            </div>
+            <div class="collection-item__actions">
+              <span class="collection-item__badge collection-item__badge--success">{{ facade.taskStateLabel(task) }}</span>
+              <select class="task-inline-select" [ngModel]="task.status" (ngModelChange)="facade.setStatus(task, $event)">
+                <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ facade.formatStatus(statusOption) }}</option>
+              </select>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(task)"><ion-icon slot="icon-only" [icon]="createIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(task.id)"><ion-icon slot="icon-only" [icon]="trashIcon"></ion-icon></ion-button>
+            </div>
+          </div>
+        </div>
+        <ng-template #emptyComplete><div class="empty-state">No completed tasks.</div></ng-template>
+      </article>
+    </section>
+  </div>
+
+  <ion-modal [isOpen]="isModalOpen()" class="workspace-modal" (didDismiss)="closeModal()">
+    <ng-template>
+      <div class="workspace-modal__card">
+        <div class="workspace-modal__header">
+          <div>
+            <p class="section-eyebrow">{{ editingId() ? 'Edit' : 'Create' }}</p>
+            <h3 class="workspace-card__title">{{ editingId() ? 'Edit task' : 'New task' }}</h3>
+          </div>
+          <ion-button fill="clear" color="medium" (click)="closeModal()">Close</ion-button>
+        </div>
+        <div class="workspace-modal__body">
+          <div class="workspace-form">
+            <div class="workspace-form__field">
+              <label>Title</label>
+              <input [ngModel]="title()" (ngModelChange)="title.set($event ?? '')" placeholder="Send staging build to client">
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Project</label>
+              <select [ngModel]="projectId()" (ngModelChange)="onProjectChange($event ?? '')">
+                <option value="">General task</option>
+                <option *ngFor="let project of projectsFacade.projects()" [value]="project.id">{{ project.name }}</option>
+              </select>
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Status</label>
+              <select [ngModel]="status()" (ngModelChange)="status.set($event)">
+                <option *ngFor="let statusOption of facade.availableStatuses" [value]="statusOption">{{ facade.formatStatus(statusOption) }}</option>
+              </select>
+            </div>
+            <div class="workspace-form__field">
+              <label>Due at</label>
+              <input type="datetime-local" [ngModel]="dueAt()" (ngModelChange)="dueAt.set($event ?? '')">
+            </div>
+            <div class="workspace-form__actions">
+              <ion-button (click)="save()">{{ editingId() ? 'Update task' : 'Save task' }}</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

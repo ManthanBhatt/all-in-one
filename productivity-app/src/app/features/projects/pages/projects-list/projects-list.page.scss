@@ -1,0 +1,54 @@
+.collection--stack {
+  align-content: start;
+}
+
+.collection-item--project {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.collection-item__block {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.project-status-row {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.project-status-row label,
+.project-subsection__label {
+  color: var(--app-copy-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-status-row select {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111922;
+  color: #f3f7fb;
+  padding: 0.72rem 0.9rem;
+  font: inherit;
+}
+
+.project-subsection {
+  display: grid;
+  gap: 0.45rem;
+  padding-top: 0.15rem;
+}
+
+.project-task-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}

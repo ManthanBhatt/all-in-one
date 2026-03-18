@@ -1,0 +1,140 @@
+ion-menu {
+  --width: 22rem;
+  --background: transparent;
+  --border: 0px;
+}
+
+.shell-panel {
+  min-height: 100%;
+  padding: 1rem;
+  background: linear-gradient(180deg, rgba(20, 34, 46, 0.98), rgba(18, 54, 57, 0.96));
+  color: #fff8ef;
+}
+
+.shell-brand {
+  padding: 1.1rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.shell-brand__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.shell-brand__logo {
+  width: min(100%, 10.5rem);
+  height: auto;
+  display: block;
+}
+
+.shell-status-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-left: auto;
+}
+
+.shell-sync-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 248, 239, 0.82);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.shell-sync-status--syncing {
+  color: #ffd486;
+}
+
+.shell-sync-status--synced {
+  color: #8ff5c1;
+}
+
+.shell-sync-status--offline {
+  color: #9db0c2;
+}
+
+.shell-sync-status--error {
+  color: #ff9e9e;
+}
+
+.shell-sync-status ion-icon {
+  font-size: 0.95rem;
+}
+
+.shell-sync-status ion-icon.spin {
+  animation: shell-spin 1s linear infinite;
+}
+
+.shell-nav {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.shell-link {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  text-decoration: none;
+  color: rgba(255, 248, 239, 0.88);
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.shell-link__tag {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  color: #f3c66f;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex: 0 0 auto;
+}
+
+.shell-link__tag ion-icon {
+  font-size: 1.05rem;
+}
+
+.shell-link__copy {
+  display: grid;
+}
+
+.shell-link__copy strong {
+  font-size: 0.98rem;
+}
+
+.shell-link__copy small {
+  color: rgba(255, 248, 239, 0.6);
+  font-size: 0.8rem;
+}
+
+.shell-link--active {
+  background: var(--ion-color-dark);
+  border-color: rgba(243, 198, 111, 0.24);
+}
+
+.shell-link--active .shell-link__tag {
+  background: linear-gradient(180deg, rgba(243, 198, 111, 0.22), rgba(217, 93, 57, 0.16));
+  color: #ffd486;
+  border-color: rgba(243, 198, 111, 0.18);
+}
+
+@keyframes shell-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

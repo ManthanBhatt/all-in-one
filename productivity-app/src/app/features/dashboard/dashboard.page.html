@@ -1,0 +1,95 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+
+    <section class="workspace-grid">
+      <article class="workspace-card workspace-card--span-4">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Clients</p>
+            <h3 class="workspace-card__title">Active accounts</h3>
+          </div>
+          <div class="workspace-card__value">{{ facade.stats().clients }}</div>
+        </div>
+        <p class="workspace-card__hint">Every client, scope, and billing relationship tied to one workspace.</p>
+      </article>
+
+      <article class="workspace-card workspace-card--span-4">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Projects</p>
+            <h3 class="workspace-card__title">Live delivery lanes</h3>
+          </div>
+          <div class="workspace-card__value">{{ facade.stats().activeProjects }}</div>
+        </div>
+        <p class="workspace-card__hint">Track planning, active work, and deadlines without leaving the app.</p>
+      </article>
+
+      <article class="workspace-card workspace-card--span-4">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Rhythm</p>
+            <h3 class="workspace-card__title">Today's workload</h3>
+          </div>
+          <div class="workspace-card__value">{{ facade.stats().todayTasks }}</div>
+        </div>
+        <p class="workspace-card__hint">Use this as the top-level signal for what needs attention now.</p>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Shortcuts</p>
+            <h3 class="workspace-card__title">Go straight to the working modules</h3>
+          </div>
+        </div>
+        <div class="link-grid">
+          <a class="link-tile" routerLink="/app/clients"><strong>Clients</strong><span>Store account details</span></a>
+          <a class="link-tile" routerLink="/app/projects"><strong>Projects</strong><span>Track delivery lanes</span></a>
+          <a class="link-tile" routerLink="/app/tasks"><strong>Tasks</strong><span>Plan daily execution</span></a>
+          <a class="link-tile" routerLink="/app/notes"><strong>Notes</strong><span>Capture context</span></a>
+          <a class="link-tile" routerLink="/app/reminders"><strong>Reminders</strong><span>Schedule follow-ups</span></a>
+          <a class="link-tile" routerLink="/app/time"><strong>Time</strong><span>Log billable work</span></a>
+          <a class="link-tile" routerLink="/app/invoices"><strong>Invoices</strong><span>Create billing records</span></a>
+          <a class="link-tile" routerLink="/app/settings"><strong>Settings</strong><span>Sync and account</span></a>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6">
+        <div class="workspace-card__top"><div><p class="section-eyebrow">Tasks</p><h3 class="workspace-card__title">Current execution queue</h3></div></div>
+        <div class="collection" *ngIf="facade.tasks().length; else emptyTasks">
+          <div class="collection-item" *ngFor="let task of facade.tasks()">
+            <div>
+              <p class="collection-item__title">{{ task.title }}</p>
+              <p class="collection-item__meta">{{ task.due_at ? (task.due_at | date:'mediumDate') : 'No deadline set' }}</p>
+            </div>
+            <span class="collection-item__badge">{{ task.status }}</span>
+          </div>
+        </div>
+        <ng-template #emptyTasks><div class="empty-state">No tasks yet. Create them from the tasks page.</div></ng-template>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6">
+        <div class="workspace-card__top"><div><p class="section-eyebrow">Reminders</p><h3 class="workspace-card__title">Upcoming nudges</h3></div></div>
+        <div class="collection" *ngIf="facade.reminders().length; else emptyReminders">
+          <div class="collection-item" *ngFor="let reminder of facade.reminders()">
+            <div>
+              <p class="collection-item__title">{{ reminder.title }}</p>
+              <p class="collection-item__meta">{{ reminder.remind_at | date:'medium' }}</p>
+            </div>
+            <span class="collection-item__badge">{{ reminder.status }}</span>
+          </div>
+        </div>
+        <ng-template #emptyReminders><div class="empty-state">No reminders scheduled yet.</div></ng-template>
+      </article>
+    </section>
+  </div>
+</ion-content>

@@ -1,0 +1,72 @@
+.app-lock {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(4, 8, 13, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.app-lock__card {
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #131c25 0%, #0f151d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 36px 80px rgba(0, 0, 0, 0.46);
+  color: #f6f9fc;
+}
+
+.app-lock__logo {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.app-lock__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: #f1c75b;
+}
+
+.app-lock__card h2 {
+  margin: 0.5rem 0;
+}
+
+.app-lock__copy {
+  margin: 0 0 1rem;
+  color: #a6b5c4;
+}
+
+.app-lock__field span {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #c7d3de;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.app-lock__field ion-input {
+  --background: #111922;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --border-radius: 14px;
+  --color: #f3f7fb;
+  --placeholder-color: #738394;
+  min-height: 3.4rem;
+}
+
+.app-lock__error {
+  margin: 1rem 0 0;
+}
+
+.app-lock__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}

@@ -1,0 +1,46 @@
+.collection--stack {
+  align-content: start;
+}
+
+.collection-item--project {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.collection-item__block {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.task-inline-select {
+  width: 100%;
+  min-width: 9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111922;
+  color: #f3f7fb;
+  padding: 0.6rem 0.8rem;
+  font: inherit;
+}
+
+.icon-action {
+  --padding-start: 0.45rem;
+  --padding-end: 0.45rem;
+}
+
+.task-lane {
+  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+}
+
+.task-lane--active {
+  border-color: rgba(61, 198, 181, 0.55);
+  box-shadow: 0 0 0 1px rgba(61, 198, 181, 0.28), var(--app-shadow-md);
+}
+
+.task-card {
+  cursor: grab;
+}
+
+.task-card:active {
+  cursor: grabbing;
+}

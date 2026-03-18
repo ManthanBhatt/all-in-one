@@ -1,0 +1,117 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Settings</p>
+            <h3 class="workspace-card__title">Control room</h3>
+            <p class="workspace-card__hint">Check account state, sync behavior, local permissions, and workspace security.</p>
+          </div>
+          <div class="workspace-card__value">{{ facade.isOnline() ? 'On' : 'Off' }}</div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Account</p>
+            <h3 class="workspace-card__title">Profile</h3>
+          </div>
+        </div>
+        <p class="workspace-card__hint" *ngIf="facade.profile() as profile">{{ profile.email }}</p>
+        <p class="workspace-card__hint" *ngIf="!facade.profile()">No profile loaded.</p>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Sync</p>
+            <h3 class="workspace-card__title">Status</h3>
+          </div>
+        </div>
+        <p class="workspace-card__hint">{{ facade.syncResult() }}</p>
+        <div class="page-actions">
+          <ion-button (click)="facade.syncNow()">Run sync</ion-button>
+          <ion-button fill="outline" class="surface-button" color="warning" (click)="facade.resetLocalData()">Reset local data</ion-button>
+          <ion-button fill="outline" class="surface-button" color="medium" (click)="signOut()">Sign out</ion-button>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Notifications</p>
+            <h3 class="workspace-card__title">Permission</h3>
+            <p class="workspace-card__hint">Grant access so reminder and task alerts can fire on web and mobile.</p>
+          </div>
+        </div>
+
+        <p class="workspace-card__hint">{{ facade.notificationPermission() }}</p>
+        <div class="page-actions">
+          <ion-button (click)="requestNotificationAccess()">Allow notifications</ion-button>
+          <ion-button *ngIf="facade.isNative" fill="outline" class="surface-button" (click)="enableExactAlarms()">Allow exact alarms</ion-button>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Security</p>
+            <h3 class="workspace-card__title">App lock</h3>
+            <p class="workspace-card__hint">Protect the workspace when the user is already signed in.</p>
+          </div>
+        </div>
+
+        <div class="workspace-form">
+          <div class="workspace-form__field security-toggle">
+            <div>
+              <label>Enable app lock</label>
+              <p class="workspace-card__hint">Require unlock when the app loads after sign-in.</p>
+            </div>
+            <ion-toggle [ngModel]="facade.appLockEnabled()" (ngModelChange)="facade.setAppLockEnabled(!!$event)"></ion-toggle>
+          </div>
+
+          <div class="workspace-form__field" *ngIf="!facade.isNative">
+            <label>Web PIN</label>
+            <input [ngModel]="pin()" (ngModelChange)="pin.set($event ?? '')" type="password" inputmode="numeric" placeholder="4 to 8 digit PIN">
+          </div>
+
+          <div class="workspace-form__field" *ngIf="!facade.isNative">
+            <label>Confirm PIN</label>
+            <input [ngModel]="confirmPin()" (ngModelChange)="confirmPin.set($event ?? '')" type="password" inputmode="numeric" placeholder="Repeat PIN">
+          </div>
+
+          <div class="workspace-form__actions" *ngIf="!facade.isNative">
+            <ion-button (click)="savePin()">Save PIN</ion-button>
+            <ion-button *ngIf="facade.hasWebPin()" fill="outline" class="surface-button" color="medium" (click)="facade.clearPin()">Clear PIN</ion-button>
+          </div>
+
+          <div class="workspace-form__field security-toggle" *ngIf="facade.isNative">
+            <div>
+              <label>Use device security on mobile</label>
+              <p class="workspace-card__hint">Use fingerprint, face unlock, pattern, or passcode.</p>
+            </div>
+            <ion-toggle [ngModel]="facade.useDeviceSecurity()" (ngModelChange)="facade.setUseDeviceSecurity(!!$event)"></ion-toggle>
+          </div>
+
+          <div class="workspace-form__actions" *ngIf="facade.isNative && facade.useDeviceSecurity()">
+            <ion-button fill="outline" class="surface-button" (click)="facade.testDeviceUnlock()">Test device unlock</ion-button>
+          </div>
+        </div>
+
+        <p class="workspace-card__hint" *ngIf="pinMessage()">{{ pinMessage() }}</p>
+        <p class="workspace-card__hint" *ngIf="facade.securityError() as error">{{ error }}</p>
+      </article>
+    </section>
+  </div>
+</ion-content>

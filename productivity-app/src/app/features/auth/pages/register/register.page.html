@@ -1,0 +1,98 @@
+<ion-content fullscreen>
+  <div class="auth-page auth-page--register">
+    <div class="auth-backdrop auth-backdrop--mint"></div>
+    <div class="auth-grid">
+      <section class="auth-story" *ngIf="!isSmallScreen">
+        <img src="assets/brand/logo-lockup.svg" alt="Freelancer OS" class="auth-brand-mark">
+        <div class="auth-brand">Create your basecamp</div>
+        <h1>Start with your own account, then let the workspace grow around your daily client work.</h1>
+        <p>
+          Notes, tasks, reminders, invoices, and sync all stay tied to your identity from day one.
+        </p>
+
+        <div class="feature-strip">
+          <article>
+            <span>Identity first</span>
+            <strong>Profiles and row ownership stay aligned</strong>
+          </article>
+          <article>
+            <span>Offline-safe</span>
+            <strong>Local writes stay available before sync</strong>
+          </article>
+          <article>
+            <span>Built to scale</span>
+            <strong>Add more modules without changing the foundation</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="auth-panel">
+        <div class="auth-panel__header">
+          <p class="eyebrow">Get started</p>
+          <h2>Create account</h2>
+          <p>Set up your account so client data, local storage, and future sync all belong to you.</p>
+        </div>
+
+        <label class="field">
+          <span>Full name</span>
+          <ion-input
+            [ngModel]="fullName()"
+            (ngModelChange)="fullName.set($event ?? '')"
+            fill="outline"
+            placeholder="Manthan Shah"
+          ></ion-input>
+        </label>
+
+        <label class="field">
+          <span>Email</span>
+          <ion-input
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event ?? '')"
+            type="email"
+            fill="outline"
+            placeholder="you@studio.dev"
+          ></ion-input>
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <ion-input
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event ?? '')"
+            type="password"
+            fill="outline"
+            placeholder="At least 6 characters"
+          ></ion-input>
+        </label>
+
+        <label class="field">
+          <span>Confirm password</span>
+          <ion-input
+            [ngModel]="confirmPassword()"
+            (ngModelChange)="confirmPassword.set($event ?? '')"
+            type="password"
+            fill="outline"
+            placeholder="Repeat your password"
+          ></ion-input>
+        </label>
+
+        <ion-text color="danger" *ngIf="errorMessage() as error">
+          <p class="form-error">{{ error }}</p>
+        </ion-text>
+
+        <ion-text color="success" *ngIf="successMessage() as message">
+          <p class="success-banner">{{ message }}</p>
+        </ion-text>
+
+        <ion-button expand="block" class="auth-cta" (click)="register()" [disabled]="isBusy()">
+          {{ isBusy() ? 'Creating account...' : 'Create account' }}
+        </ion-button>
+
+        <div class="auth-switch">
+          <span>Already have an account?</span>
+          <a routerLink="/auth/login">Sign in</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</ion-content>

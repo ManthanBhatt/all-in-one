@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Time</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openCreate()">Log time</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Time</p>
+            <h3 class="workspace-card__title">Tracked work</h3>
+            <p class="workspace-card__hint">Log focused sessions and keep billable effort visible.</p>
+          </div>
+          <div class="workspace-card__value">{{ facade.totalMinutes() }}</div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Logs</p>
+            <h3 class="workspace-card__title">Recent time entries</h3>
+          </div>
+          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add entry</ion-button>
+        </div>
+
+        <div class="collection" *ngIf="facade.entries().length; else emptyState">
+          <div class="collection-item" *ngFor="let entry of facade.entries()">
+            <div>
+              <p class="collection-item__title">{{ entry.description || 'Work session' }}</p>
+              <p class="collection-item__meta">{{ entry.duration_minutes || 0 }} minutes</p>
+            </div>
+            <div class="collection-item__actions">
+              <ion-button size="small" fill="clear" (click)="openEdit(entry)">Edit</ion-button>
+              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(entry.id)">Delete</ion-button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">No time tracked yet.</div>
+        </ng-template>
+      </article>
+    </section>
+  </div>
+
+  <ion-modal [isOpen]="isModalOpen()" class="workspace-modal" (didDismiss)="closeModal()">
+    <ng-template>
+      <div class="workspace-modal__card">
+        <div class="workspace-modal__header">
+          <div>
+            <p class="section-eyebrow">{{ editingId() ? 'Edit' : 'Create' }}</p>
+            <h3 class="workspace-card__title">{{ editingId() ? 'Edit time entry' : 'Log time entry' }}</h3>
+          </div>
+          <ion-button fill="clear" color="medium" (click)="closeModal()">Close</ion-button>
+        </div>
+        <div class="workspace-modal__body">
+          <div class="workspace-form">
+            <div class="workspace-form__field">
+              <label>Description</label>
+              <input [ngModel]="description()" (ngModelChange)="description.set($event ?? '')" placeholder="Client review call">
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Started at</label>
+              <input type="datetime-local" [ngModel]="startedAt()" (ngModelChange)="startedAt.set($event ?? '')">
+            </div>
+            <div class="workspace-form__field--half">
+              <label>Ended at</label>
+              <input type="datetime-local" [ngModel]="endedAt()" (ngModelChange)="endedAt.set($event ?? '')">
+            </div>
+            <div class="workspace-form__actions">
+              <ion-button (click)="save()">{{ editingId() ? 'Update entry' : 'Save entry' }}</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>
