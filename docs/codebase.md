@@ -2,16 +2,17 @@
 
 ## High-level shape
 
-The app lives in `productivity-app/` and is structured as a local-first Angular application with Ionic UI and Capacitor native integrations.
+The app is a local-first Angular application with Ionic UI and Capacitor native integrations.
 
 ```text
-productivity-app/
+.
   src/app/
     core/
     features/
     shared/
   supabase/migrations/
   android/
+  docs/
 ```
 
 ## Main application layers
@@ -80,8 +81,6 @@ The app is local-first.
 5. Sync service pushes pending changes to Supabase when online.
 6. Pulled remote changes are merged back into local storage.
 
-This means rendering should not depend on active network connectivity.
-
 ## Key concepts
 
 ### Repositories
@@ -114,7 +113,7 @@ The sync layer performs:
 
 ## UI conventions
 
-The app intentionally uses a dark, non-default Ionic style with:
+The app uses a dark, non-default Ionic style with:
 - custom cards and sections
 - modal-driven create/edit flows
 - task board drag-and-drop
@@ -128,7 +127,7 @@ The app intentionally uses a dark, non-default Ionic style with:
 - app icons
 - local notifications
 - biometric/device auth plugin sync
-- permissions already added in Android manifest
+- permissions in Android manifest
 
 ### iOS later
 
@@ -137,8 +136,8 @@ The code supports iOS, but the native platform folder needs to be added on macOS
 ## Where to start as a contributor
 
 Read these files first:
-- `productivity-app/src/app/core/models/domain.models.ts`
-- `productivity-app/src/app/core/db/app-database.service.ts`
-- `productivity-app/src/app/core/sync/sync.service.ts`
-- `productivity-app/src/app/shared/components/app-shell/app-shell.component.ts`
-- `productivity-app/src/app/features/tasks/pages/tasks-list/tasks-list.page.ts`
+- `src/app/core/models/domain.models.ts`
+- `src/app/core/db/app-database.service.ts`
+- `src/app/core/sync/sync.service.ts`
+- `src/app/shared/components/app-shell/app-shell.component.ts`
+- `src/app/features/tasks/pages/tasks-list/tasks-list.page.ts`

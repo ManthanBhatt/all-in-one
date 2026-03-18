@@ -24,8 +24,11 @@ Freelancer OS is an offline-first Ionic + Angular + Capacitor workspace for inde
 
 ## Repository Layout
 
-- `productivity-app/`: application source, Capacitor project, Supabase migrations
-- `docs/`: open-source documentation and code wiki
+- `src/`: Angular app
+- `android/`: Android Capacitor project
+- `supabase/`: SQL migrations for Supabase
+- `docs/`: architecture and database wiki
+- `resources/`: brand and icon source assets
 
 ## Quick Start
 
@@ -33,13 +36,13 @@ Freelancer OS is an offline-first Ionic + Angular + Capacitor workspace for inde
 
 ```bash
 git clone https://github.com/ManthanBhatt/all-in-one.git
-cd all-in-one/productivity-app
+cd all-in-one
 npm install
 ```
 
 ### 2. Configure Supabase
 
-Add your Supabase project URL and anon key to the app config used by the Angular app.
+Add your Supabase project URL and anon key to the Angular environment config.
 
 The codebase expects:
 - Supabase Auth enabled
@@ -112,6 +115,7 @@ npx cap open ios
 - [Codebase Guide](./docs/codebase.md)
 - [Database Guide](./docs/database.md)
 - [Sync and Security Guide](./docs/sync-security.md)
+- [Contributing Guide](./CONTRIBUTING.md)
 
 ## Current Scope
 

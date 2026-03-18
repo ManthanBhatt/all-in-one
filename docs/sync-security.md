@@ -29,7 +29,7 @@ Queue statuses:
 - `failed`
 - `conflict`
 
-Deletes should remove records remotely as well, not only locally.
+Deletes remove records remotely as well as locally.
 
 ## Conflict handling
 
@@ -41,11 +41,6 @@ Current v1 behavior:
 
 The app tracks online/offline state and exposes sync status in the shell UI.
 
-Practical behavior:
-- if offline, writes stay local
-- if online, writes auto-sync shortly after save
-- manual sync remains available in Settings
-
 ## Notification architecture
 
 ### Web
@@ -54,13 +49,7 @@ Uses the browser Notification API.
 
 ### Native
 
-Uses `@capacitor/local-notifications`.
-
-Current behavior includes:
-- permission request
-- Android notification channel creation
-- exact alarm access flow on Android
-- scheduling task due-date and reminder notifications
+Uses `@capacitor/local-notifications` with Android channel setup and exact alarm access flow.
 
 ## App lock architecture
 
@@ -71,12 +60,7 @@ Current behavior includes:
 
 ### Native
 
-Uses `@aparajita/capacitor-biometric-auth`.
-
-Current mobile unlock flow supports:
-- fingerprint
-- face unlock
-- device credential fallback such as PIN, pattern, or password
+Uses `@aparajita/capacitor-biometric-auth` with biometric and device credential fallback.
 
 ## Settings controls
 
@@ -93,12 +77,4 @@ The Settings screen currently allows:
 
 - Supabase Auth controls identity
 - RLS controls cloud ownership
-- app lock is a convenience/privacy layer, not a replacement for backend authorization
-- secrets should not be stored in plain text business tables
-
-## Known limitations
-
-- conflict resolution UI is still minimal
-- iOS native folder is not yet committed in this repo
-- local storage abstraction still uses browser fallback in web mode
-- deeper automated test coverage remains to be expanded
+- app lock is a privacy layer, not a replacement for backend authorization
