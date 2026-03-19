@@ -44,7 +44,7 @@
         <p class="workspace-card__hint">Use this as the top-level signal for what needs attention now.</p>
       </article>
 
-      <article class="workspace-card workspace-card--span-12">
+      <!-- <article class="workspace-card workspace-card--span-12">
         <div class="workspace-card__top">
           <div>
             <p class="section-eyebrow">Shortcuts</p>
@@ -61,12 +61,68 @@
           <a class="link-tile" routerLink="/app/invoices"><strong>Invoices</strong><span>Create billing records</span></a>
           <a class="link-tile" routerLink="/app/settings"><strong>Settings</strong><span>Sync and account</span></a>
         </div>
+      </article> -->
+
+      <article class="workspace-card workspace-card--span-6" *ngIf="facade.lastCounter() as counter">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Counters</p>
+            <h3 class="workspace-card__title">Last active counter</h3>
+          </div>
+          <ion-icon [icon]="pinIcon" color="secondary" style="opacity: 0.5"></ion-icon>
+        </div>
+        <div class="collection">
+          <div class="collection-item" [routerLink]="['/app/counters', counter.id]">
+            <div>
+              <p class="collection-item__title">{{ counter.name }}</p>
+              <p class="collection-item__meta">Last updated {{ counter.updated_at | date:'medium' }}</p>
+            </div>
+            <div class="workspace-card__value" style="font-size: 1.5rem; margin: 0;">{{ counter.current_value }}</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6" *ngIf="facade.overdueReminders().length">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow" style="color: var(--ion-color-danger)">Attention</p>
+            <h3 class="workspace-card__title">Overdue reminders</h3>
+          </div>
+          <ion-icon [icon]="alertIcon" color="danger" size="large"></ion-icon>
+        </div>
+        <div class="collection">
+          <div class="collection-item collection-item--overdue" *ngFor="let reminder of facade.overdueReminders()" routerLink="/app/reminders">
+            <div>
+              <p class="collection-item__title">{{ reminder.title }}</p>
+              <p class="collection-item__meta" style="color: var(--ion-color-danger)">Due {{ reminder.remind_at | date:'medium' }}</p>
+            </div>
+            <span class="collection-item__badge collection-item__badge--danger">Overdue</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="workspace-card workspace-card--span-6" *ngIf="facade.pinnedNotes().length">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow" style="color: var(--app-accent)">Priority</p>
+            <h3 class="workspace-card__title">Pinned context</h3>
+          </div>
+          <ion-icon [icon]="pinIcon" color="primary" size="large"></ion-icon>
+        </div>
+        <div class="collection">
+          <div class="collection-item collection-item--pinned" *ngFor="let note of facade.pinnedNotes()" routerLink="/app/notes">
+            <div>
+              <p class="collection-item__title">{{ note.title || 'Note' }}</p>
+              <p class="collection-item__meta">{{ note.body }}</p>
+            </div>
+          </div>
+        </div>
       </article>
 
       <article class="workspace-card workspace-card--span-6">
         <div class="workspace-card__top"><div><p class="section-eyebrow">Tasks</p><h3 class="workspace-card__title">Current execution queue</h3></div></div>
         <div class="collection" *ngIf="facade.tasks().length; else emptyTasks">
-          <div class="collection-item" *ngFor="let task of facade.tasks()">
+          <div class="collection-item" *ngFor="let task of facade.tasks()" routerLink="/app/tasks">
             <div>
               <p class="collection-item__title">{{ task.title }}</p>
               <p class="collection-item__meta">{{ task.due_at ? (task.due_at | date:'mediumDate') : 'No deadline set' }}</p>
@@ -79,8 +135,8 @@
 
       <article class="workspace-card workspace-card--span-6">
         <div class="workspace-card__top"><div><p class="section-eyebrow">Reminders</p><h3 class="workspace-card__title">Upcoming nudges</h3></div></div>
-        <div class="collection" *ngIf="facade.reminders().length; else emptyReminders">
-          <div class="collection-item" *ngFor="let reminder of facade.reminders()">
+        <div class="collection" *ngIf="facade.upcomingReminders().length; else emptyReminders">
+          <div class="collection-item" *ngFor="let reminder of facade.upcomingReminders()" routerLink="/app/reminders">
             <div>
               <p class="collection-item__title">{{ reminder.title }}</p>
               <p class="collection-item__meta">{{ reminder.remind_at | date:'medium' }}</p>
@@ -88,7 +144,7 @@
             <span class="collection-item__badge">{{ reminder.status }}</span>
           </div>
         </div>
-        <ng-template #emptyReminders><div class="empty-state">No reminders scheduled yet.</div></ng-template>
+        <ng-template #emptyReminders><div class="empty-state">No upcoming reminders.</div></ng-template>
       </article>
     </section>
   </div>

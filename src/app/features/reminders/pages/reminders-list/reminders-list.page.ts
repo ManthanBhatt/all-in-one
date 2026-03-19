@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSegment, IonSegmentButton, IonLabel, IonSearchbar } from '@ionic/angular/standalone';
 
 import { Reminder } from '../../../../core/models/domain.models';
 import { RemindersFacade } from '../../reminders.facade';
@@ -11,10 +11,12 @@ import { RemindersFacade } from '../../reminders.facade';
   templateUrl: './reminders-list.page.html',
   styleUrls: ['./reminders-list.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar],
+  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSegment, IonSegmentButton, IonLabel, IonSearchbar],
 })
 export class RemindersListPage implements OnInit {
   readonly facade = inject(RemindersFacade);
+  readonly currentTab = signal<'scheduled' | 'completed'>('scheduled');
+
   readonly title = signal('');
   readonly remindAt = signal('');
   readonly editingId = signal<string | null>(null);

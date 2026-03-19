@@ -11,11 +11,22 @@ export class ProjectsFacade {
   private readonly sessionStore = inject(SessionStore);
   private readonly repository = inject(ProjectsRepository);
   private readonly projectsState = signal<Project[]>([]);
+  readonly searchQuery = signal('');
 
-  readonly projects = computed(() => this.projectsState());
+  readonly projects = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const list = this.projectsState();
+    if (!query) return list;
+    return list.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.description?.toLowerCase().includes(query)
+    );
+  });
+
   readonly activeProjects = computed(() =>
-    this.projectsState().filter((project) => project.status === 'active' || project.status === 'planning'),
+    this.projects().filter((p) => p.status === 'active' || p.status === 'planning'),
   );
+
   readonly planningProjects = computed(() => this.projectsState().filter((project) => project.status === 'planning'));
   readonly inFlightProjects = computed(() => this.projectsState().filter((project) => project.status === 'active' || project.status === 'on_hold'));
   readonly completedProjects = computed(() => this.projectsState().filter((project) => project.status === 'completed' || project.status === 'archived'));

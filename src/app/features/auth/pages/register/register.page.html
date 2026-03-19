@@ -76,6 +76,23 @@
           ></ion-input>
         </label>
 
+        <div class="module-selection">
+          <p class="module-header">Choose your modules</p>
+          <ion-list class="module-list">
+            <ion-item *ngFor="let feature of availableFeatures" class="module-item">
+              <ion-checkbox
+                slot="start"
+                [checked]="selectedFeatures().includes(feature.id)"
+                (ionChange)="toggleFeature(feature.id, $any($event).detail.checked)"
+              ></ion-checkbox>
+              <ion-label>
+                <h3>{{ feature.label }}</h3>
+                <p>{{ feature.description }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+
         <ion-text color="danger" *ngIf="errorMessage() as error">
           <p class="form-error">{{ error }}</p>
         </ion-text>

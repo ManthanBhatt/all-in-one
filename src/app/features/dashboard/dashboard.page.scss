@@ -1,1 +1,12 @@
-ion-content { --background: transparent; }
+.collection-item {
+  cursor: pointer;
+}
+
+.collection-item--overdue {
+  border-left: 3px solid var(--ion-color-danger);
+}
+
+.collection-item--pinned {
+  border-left: 3px solid var(--app-accent);
+  background: rgba(79, 209, 181, 0.05);
+}

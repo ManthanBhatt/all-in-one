@@ -7,6 +7,7 @@ export type EntityType =
   | 'reminders'
   | 'time_entries'
   | 'invoices'
+  | 'counters'
   | 'sync_queue';
 
 export type ProjectStatus = 'planning' | 'active' | 'on_hold' | 'completed' | 'archived';
@@ -34,6 +35,7 @@ export interface Profile {
   id: string;
   email: string;
   full_name: string;
+  enabled_features: string[];
 }
 
 export interface Client extends EntityBase {
@@ -133,6 +135,12 @@ export interface Invoice extends EntityBase {
   notes: string | null;
   paid_at: string | null;
   items: InvoiceItem[];
+}
+
+export interface Counter extends EntityBase {
+  name: string;
+  current_value: number;
+  target_value: number | null;
 }
 
 export interface SyncQueueItem extends EntityBase {

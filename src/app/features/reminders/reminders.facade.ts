@@ -14,14 +14,27 @@ export class RemindersFacade {
   private readonly notificationService = inject(LocalNotificationService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly remindersState = signal<Reminder[]>([]);
+  readonly searchQuery = signal('');
   private readonly now = signal(Date.now());
 
-  readonly reminders = computed(() => this.remindersState());
-  readonly upcoming = computed(() =>
+  readonly reminders = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const list = this.remindersState();
+    if (!query) return list;
+    return list.filter(r => r.title.toLowerCase().includes(query));
+  });
+  readonly scheduledReminders = computed(() => 
     this.remindersState()
-      .filter((reminder) => reminder.status !== 'completed')
-      .sort((left, right) => new Date(left.remind_at).getTime() - new Date(right.remind_at).getTime())
-      .slice(0, 5),
+      .filter(r => r.status !== 'completed')
+      .sort((a, b) => new Date(a.remind_at).getTime() - new Date(b.remind_at).getTime())
+  );
+  readonly completedReminders = computed(() => 
+    this.remindersState()
+      .filter(r => r.status === 'completed')
+      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+  );
+  readonly upcoming = computed(() =>
+    this.scheduledReminders().slice(0, 5)
   );
 
   constructor() {

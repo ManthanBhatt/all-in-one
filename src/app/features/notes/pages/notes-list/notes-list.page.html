@@ -5,12 +5,20 @@
     </ion-buttons>
     <ion-title>Notes</ion-title>
   </ion-toolbar>
+  <ion-toolbar class="search-toolbar">
+    <ion-searchbar 
+      [value]="facade.searchQuery()" 
+      (ionInput)="facade.searchQuery.set($any($event).target.value ?? '')" 
+      placeholder="Search notes..."
+      class="custom-searchbar"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="workspace-page">
     <section class="workspace-grid workspace-grid--compact">
-      <article class="workspace-card workspace-card--span-12">
+      <!-- <article class="workspace-card workspace-card--span-12">
         <div class="workspace-card__top">
           <div>
             <p class="section-eyebrow">Notes</p>
@@ -19,7 +27,7 @@
           </div>
           <div class="workspace-card__value">{{ facade.notes().length }}</div>
         </div>
-      </article>
+      </article> -->
 
       <article class="workspace-card workspace-card--span-12">
         <div class="workspace-card__top">
@@ -31,12 +39,18 @@
         </div>
 
         <div class="collection" *ngIf="facade.notes().length; else emptyState">
-          <div class="collection-item" *ngFor="let note of facade.notes()">
+          <div class="collection-item" [class.collection-item--pinned]="note.is_pinned" *ngFor="let note of facade.notes()">
             <div>
-              <p class="collection-item__title">{{ note.title || 'Quick note' }}</p>
+              <p class="collection-item__title">
+                <ion-icon [icon]="pinnedIcon" color="primary" *ngIf="note.is_pinned" style="margin-right: 4px; vertical-align: middle;"></ion-icon>
+                {{ note.title || 'Quick note' }}
+              </p>
               <p class="collection-item__meta">{{ note.body }}</p>
             </div>
             <div class="collection-item__actions">
+              <ion-button size="small" fill="clear" (click)="togglePin(note, $event)">
+                <ion-icon slot="icon-only" [icon]="note.is_pinned ? pinnedIcon : pinIcon"></ion-icon>
+              </ion-button>
               <ion-button size="small" fill="clear" (click)="openEdit(note)">Edit</ion-button>
               <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(note.id)">Delete</ion-button>
             </div>

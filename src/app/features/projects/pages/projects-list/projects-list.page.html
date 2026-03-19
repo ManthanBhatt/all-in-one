@@ -5,12 +5,20 @@
     </ion-buttons>
     <ion-title>Projects</ion-title>
   </ion-toolbar>
+  <ion-toolbar class="search-toolbar">
+    <ion-searchbar 
+      [value]="facade.searchQuery()" 
+      (ionInput)="facade.searchQuery.set($any($event).target.value ?? '')" 
+      placeholder="Search projects..."
+      class="custom-searchbar"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="workspace-page">
     <section class="workspace-grid workspace-grid--compact">
-      <article class="workspace-card workspace-card--span-12">
+      <!-- <article class="workspace-card workspace-card--span-12">
         <div class="workspace-card__top">
           <div>
             <p class="section-eyebrow">Projects</p>
@@ -19,7 +27,7 @@
           </div>
           <ion-button fill="outline" class="surface-button" (click)="openCreate()" [disabled]="!clientsFacade.clients().length">Add project</ion-button>
         </div>
-      </article>
+      </article> -->
 
       <article class="workspace-card workspace-card--span-12" *ngIf="!clientsFacade.clients().length">
         <div class="empty-state">

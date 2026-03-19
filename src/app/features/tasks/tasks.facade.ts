@@ -14,9 +14,18 @@ export class TasksFacade {
   private readonly notificationService = inject(LocalNotificationService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly tasksState = signal<Task[]>([]);
+  readonly searchQuery = signal('');
   private readonly now = signal(Date.now());
 
-  readonly tasks = computed(() => this.tasksState());
+  readonly tasks = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const list = this.tasksState();
+    if (!query) return list;
+    return list.filter(t => 
+      t.title.toLowerCase().includes(query) || 
+      t.description?.toLowerCase().includes(query)
+    );
+  });
   readonly todayTasks = computed(() => this.tasksState().filter((task) => task.status !== 'complete').slice(0, 5));
   readonly availableStatuses: TaskStatus[] = ['planning', 'in_flight', 'on_hold', 'in_review', 'complete'];
   readonly planningTasks = computed(() => this.tasksState().filter((task) => task.status === 'planning'));

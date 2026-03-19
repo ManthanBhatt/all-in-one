@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonSearchbar } from '@ionic/angular/standalone';
+import { pinOutline, pin } from 'ionicons/icons';
 
 import { Note } from '../../../../core/models/domain.models';
 import { NotesFacade } from '../../notes.facade';
@@ -11,10 +12,13 @@ import { NotesFacade } from '../../notes.facade';
   templateUrl: './notes-list.page.html',
   styleUrls: ['./notes-list.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar],
+  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonSearchbar],
 })
 export class NotesListPage implements OnInit {
   readonly facade = inject(NotesFacade);
+  readonly pinIcon = pinOutline;
+  readonly pinnedIcon = pin;
+
   readonly title = signal('');
   readonly body = signal('');
   readonly editingId = signal<string | null>(null);
@@ -22,6 +26,11 @@ export class NotesListPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.facade.load();
+  }
+
+  async togglePin(note: Note, event: Event): Promise<void> {
+    event.stopPropagation();
+    await this.facade.togglePin(note);
   }
 
   openCreate(): void {

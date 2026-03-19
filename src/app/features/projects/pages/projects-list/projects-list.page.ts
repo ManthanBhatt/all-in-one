@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar } from '@ionic/angular/standalone';
 
 import { Project, ProjectStatus } from '../../../../core/models/domain.models';
 import { ClientsFacade } from '../../../clients/clients.facade';
@@ -14,7 +14,7 @@ import { ProjectsFacade } from '../../projects.facade';
   templateUrl: './projects-list.page.html',
   styleUrls: ['./projects-list.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar],
+  imports: [CommonModule, FormsModule, RouterLink, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar],
 })
 export class ProjectsListPage implements OnInit {
   readonly facade = inject(ProjectsFacade);

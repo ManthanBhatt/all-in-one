@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import {
   IonContent,
   IonHeader,
@@ -10,7 +11,11 @@ import {
   IonSplitPane,
   IonTitle,
   IonToolbar,
-  MenuController
+  MenuController,
+  IonSearchbar,
+  IonList,
+  IonItem,
+  IonLabel,
 } from '@ionic/angular/standalone';
 import {
   albumsOutline,
@@ -26,9 +31,12 @@ import {
   settingsOutline,
   timeOutline,
   cloudDoneOutline,
+  fingerPrintOutline,
 } from 'ionicons/icons';
 
 import { SyncService } from '../../../core/sync/sync.service';
+import { SessionStore } from '../../../core/auth/session.store';
+import { GlobalSearchService } from '../../../core/services/search.service';
 import { OfflineBannerComponent } from '../offline-banner/offline-banner.component';
 
 @Component({
@@ -38,8 +46,10 @@ import { OfflineBannerComponent } from '../offline-banner/offline-banner.compone
   standalone: true,
   imports: [
     NgFor,
+    NgIf,
     RouterLink,
     RouterLinkActive,
+    FormsModule,
     IonContent,
     IonHeader,
     IonIcon,
@@ -48,11 +58,17 @@ import { OfflineBannerComponent } from '../offline-banner/offline-banner.compone
     IonSplitPane,
     IonTitle,
     IonToolbar,
+    IonSearchbar,
+    IonList,
+    IonItem,
+    IonLabel,
     OfflineBannerComponent,
   ],
 })
 export class AppShellComponent {
   private readonly syncService = inject(SyncService);
+  private readonly sessionStore = inject(SessionStore);
+  protected readonly searchService = inject(GlobalSearchService);
 
   readonly indicatorState = this.syncService.indicatorState;
   readonly indicatorLabel = this.syncService.indicatorLabel;
@@ -64,17 +80,23 @@ export class AppShellComponent {
     error: alertCircleOutline,
   };
 
-  readonly navigation = [
-    { title: 'Dashboard', subtitle: 'Daily command center', path: '/app/dashboard', icon: homeOutline },
-    { title: 'Clients', subtitle: 'Accounts and billing context', path: '/app/clients', icon: peopleOutline },
-    { title: 'Projects', subtitle: 'Delivery pipeline', path: '/app/projects', icon: gridOutline },
-    { title: 'Tasks', subtitle: 'Execution board', path: '/app/tasks', icon: checkboxOutline },
-    { title: 'Notes', subtitle: 'Captured context', path: '/app/notes', icon: albumsOutline },
-    { title: 'Reminders', subtitle: 'Follow-ups and deadlines', path: '/app/reminders', icon: notificationsOutline },
-    { title: 'Time', subtitle: 'Tracked work', path: '/app/time', icon: timeOutline },
-    { title: 'Invoices', subtitle: 'Billing control', path: '/app/invoices', icon: clipboardOutline },
+  private readonly navigationItems = [
+    { title: 'Dashboard', subtitle: 'Daily command center', path: '/app/dashboard', icon: homeOutline, feature: 'dashboard' },
+    { title: 'Clients', subtitle: 'Accounts and billing context', path: '/app/clients', icon: peopleOutline, feature: 'clients' },
+    { title: 'Projects', subtitle: 'Delivery pipeline', path: '/app/projects', icon: gridOutline, feature: 'projects' },
+    { title: 'Tasks', subtitle: 'Execution board', path: '/app/tasks', icon: checkboxOutline, feature: 'tasks' },
+    { title: 'Notes', subtitle: 'Captured context', path: '/app/notes', icon: albumsOutline, feature: 'notes' },
+    { title: 'Reminders', subtitle: 'Follow-ups and deadlines', path: '/app/reminders', icon: notificationsOutline, feature: 'reminders' },
+    { title: 'Time', subtitle: 'Tracked work', path: '/app/time', icon: timeOutline, feature: 'time' },
+    { title: 'Invoices', subtitle: 'Billing control', path: '/app/invoices', icon: clipboardOutline, feature: 'invoices' },
+    { title: 'Counters', subtitle: 'Ultra-fast counting', path: '/app/counters', icon: fingerPrintOutline, feature: 'counters' },
     { title: 'Settings', subtitle: 'Account and sync', path: '/app/settings', icon: settingsOutline },
   ];
+
+  readonly navigation = computed(() => {
+    const enabledFeatures = this.sessionStore.session().profile?.enabled_features ?? [];
+    return this.navigationItems.filter(item => !item.feature || enabledFeatures.includes(item.feature));
+  });
 
   constructor(private menuCtrl: MenuController) { }
 

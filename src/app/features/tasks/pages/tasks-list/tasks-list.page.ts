@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar } from '@ionic/angular/standalone';
 import { createOutline, trashOutline } from 'ionicons/icons';
 
 import { Task, TaskStatus } from '../../../../core/models/domain.models';
@@ -14,7 +14,7 @@ import { TasksFacade } from '../../tasks.facade';
   templateUrl: './tasks-list.page.html',
   styleUrls: ['./tasks-list.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar],
+  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar],
 })
 export class TasksListPage implements OnInit {
   readonly facade = inject(TasksFacade);

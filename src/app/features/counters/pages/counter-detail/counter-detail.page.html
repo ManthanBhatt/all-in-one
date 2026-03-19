@@ -1,0 +1,51 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/counters"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ facade.currentCounter()?.name || 'Counter' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleSound()">
+        <ion-icon slot="icon-only" [icon]="facade.soundEnabled() ? soundIcon : muteIcon"></ion-icon>
+      </ion-button>
+      <ion-button (click)="toggleHaptics()" [color]="facade.hapticsEnabled() ? 'primary' : 'medium'">
+        <ion-icon slot="icon-only" [icon]="hapticIcon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="facade.currentCounter()?.target_value" [value]="progress()" color="primary"></ion-progress-bar>
+</ion-header>
+
+<ion-content scrollY="false">
+  <div class="counter-tap-area" 
+    (mousedown)="startAutoIncrement()" 
+    (mouseup)="stopAutoIncrement()" 
+    (mouseleave)="stopAutoIncrement()"
+    (touchstart)="startAutoIncrement()" 
+    (touchend)="stopAutoIncrement()"
+    (click)="increment()">
+    
+    <div class="counter-display">
+      <div class="counter-value">
+        {{ facade.currentCounter()?.current_value }}
+      </div>
+      <div class="target-indicator" *ngIf="facade.currentCounter()?.target_value">
+        Target: {{ facade.currentCounter()?.target_value }}
+      </div>
+    </div>
+
+    <div class="tap-hint">Tap anywhere to count</div>
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="danger" (click)="confirmReset($event)">
+      <ion-icon [icon]="resetIcon"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="start">
+    <ion-fab-button color="medium" (click)="decrement($event)">
+      <ion-icon [icon]="removeIcon"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

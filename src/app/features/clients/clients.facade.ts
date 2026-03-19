@@ -11,9 +11,21 @@ export class ClientsFacade {
   private readonly sessionStore = inject(SessionStore);
   private readonly repository = inject(ClientsRepository);
   private readonly clientsState = signal<Client[]>([]);
+  readonly searchQuery = signal('');
 
-  readonly clients = computed(() => this.clientsState());
-  readonly activeCount = computed(() => this.clientsState().length);
+  readonly clients = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const list = this.clientsState();
+    if (!query) return list;
+    return list.filter(c => 
+      c.name.toLowerCase().includes(query) || 
+      c.company_name?.toLowerCase().includes(query)
+    );
+  });
+
+  readonly activeCount = computed(() => 
+    this.clientsState().filter((c) => c.status === 'active').length
+  );
 
   async load(): Promise<void> {
     const userId = this.sessionStore.userId();

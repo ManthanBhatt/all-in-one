@@ -8,8 +8,8 @@
           [class.shell-sync-status--synced]="indicatorState() === 'synced'"
           [class.shell-sync-status--offline]="indicatorState() === 'offline'"
           [class.shell-sync-status--error]="indicatorState() === 'error'" slot="end">
-          <ion-icon [icon]="syncIcons[indicatorState()]" [class.spin]="indicatorState() === 'syncing'"></ion-icon>
-          <span>{{ indicatorLabel() }}</span>
+          <ion-icon [icon]="syncIcons[indicatorState()]" [class.spin]="indicatorState() === 'syncing'" slot="icon-only"></ion-icon>
+          <!-- <span>{{ indicatorLabel() }}</span> -->
         </div>
       </ion-toolbar>
     </ion-header>
@@ -24,8 +24,27 @@
           </div>
         </div>
 
+        <div class="shell-search">
+          <ion-searchbar 
+            [value]="searchService.query()" 
+            (ionInput)="searchService.query.set($any($event).target.value ?? '')" 
+            placeholder="Global search..."
+            class="global-searchbar"
+          ></ion-searchbar>
+          <div class="global-results" *ngIf="searchService.results().length > 0">
+            <ion-list lines="none">
+              <ion-item button *ngFor="let res of searchService.results()" (click)="searchService.navigateTo(res)">
+                <ion-label>
+                  <h3>{{ res.title }}</h3>
+                  <p>{{ res.subtitle }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+        </div>
+
         <div class="shell-nav">
-          <a class="shell-link" *ngFor="let item of navigation" [routerLink]="item.path"
+          <a class="shell-link" *ngFor="let item of navigation()" [routerLink]="item.path"
             routerLinkActive="shell-link--active" (click)="closeMenu()">
             <span class="shell-link__tag">
               <ion-icon [icon]="item.icon"></ion-icon>

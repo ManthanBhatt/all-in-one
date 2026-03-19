@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar } from '@ionic/angular/standalone';
 
 import { Invoice } from '../../../../core/models/domain.models';
 import { InvoicesFacade } from '../../invoices.facade';
@@ -11,7 +11,7 @@ import { InvoicesFacade } from '../../invoices.facade';
   templateUrl: './invoices-list.page.html',
   styleUrls: ['./invoices-list.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar],
+  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar],
 })
 export class InvoicesListPage implements OnInit {
   readonly facade = inject(InvoicesFacade);

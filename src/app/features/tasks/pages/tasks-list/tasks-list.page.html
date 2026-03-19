@@ -5,12 +5,20 @@
     </ion-buttons>
     <ion-title>Tasks</ion-title>
   </ion-toolbar>
+  <ion-toolbar class="search-toolbar">
+    <ion-searchbar 
+      [value]="facade.searchQuery()" 
+      (ionInput)="facade.searchQuery.set($any($event).target.value ?? '')" 
+      placeholder="Search tasks..."
+      class="custom-searchbar"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="workspace-page">
     <section class="workspace-grid workspace-grid--compact">
-      <article class="workspace-card workspace-card--span-12">
+      <!-- <article class="workspace-card workspace-card--span-12">
         <div class="workspace-card__top">
           <div>
             <div class="ion-display-flex ion-justify-content-between ion-align-items-center">
@@ -21,7 +29,7 @@
             <p class="workspace-card__hint">Create general tasks or attach them to projects so delivery work stays connected. Drag cards between columns to update status.</p>
           </div>
         </div>
-      </article>
+      </article> -->
 
       <article class="workspace-card workspace-card--span-4 task-lane" [class.task-lane--active]="dropStatus() === 'planning'" (dragover)="onDragOver($event, 'planning')" (dragleave)="onDragLeave('planning')" (drop)="onDrop('planning')">
         <div class="workspace-card__top">

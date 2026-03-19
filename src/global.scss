@@ -154,6 +154,29 @@ ion-button {
   margin: 0.3rem 0 0;
 }
 
+.search-toolbar {
+  --padding-top: 0;
+  --padding-bottom: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  min-height: auto;
+}
+
+.custom-searchbar {
+  --background: rgba(255, 255, 255, 0.05) !important;
+  --border-radius: 12px !important;
+  --placeholder-color: rgba(255, 255, 255, 0.5) !important;
+  --icon-color: rgba(255, 255, 255, 0.5) !important;
+  --clear-button-color: rgba(255, 255, 255, 0.5) !important;
+  --color: #fff !important;
+  --box-shadow: none;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  padding: 0;
+}
+
 .collection {
   display: grid;
   gap: 0.75rem;
@@ -168,6 +191,14 @@ ion-button {
   border-radius: var(--app-radius-md);
   background: var(--app-surface-strong);
   border: 1px solid var(--app-border);
+  min-width: 0;
+
+  p {
+    margin: 0;
+    white-space: break-spaces;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
 }
 
 .collection-item__title {

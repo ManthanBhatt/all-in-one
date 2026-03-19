@@ -18,6 +18,22 @@ export class SessionStore {
   readonly isLoading = computed(() => this.state().status === 'loading');
   readonly userId = computed(() => this.state().profile?.id ?? null);
 
+  readonly getLandingRoute = computed(() => {
+    const profile = this.state().profile;
+    if (!profile) return '/auth/login';
+
+    const enabled = profile.enabled_features ?? [];
+    if (enabled.includes('dashboard')) {
+      return '/app/dashboard';
+    }
+
+    if (enabled.length > 0) {
+      return `/app/${enabled[0]}`;
+    }
+
+    return '/app/settings';
+  });
+
   setLoading(): void {
     this.state.set({
       status: 'loading',

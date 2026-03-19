@@ -13,8 +13,14 @@ export class InvoicesFacade {
   private readonly sessionStore = inject(SessionStore);
   private readonly repository = inject(InvoicesRepository);
   private readonly invoicesState = signal<Invoice[]>([]);
+  readonly searchQuery = signal('');
 
-  readonly invoices = computed(() => this.invoicesState());
+  readonly invoices = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const list = this.invoicesState();
+    if (!query) return list;
+    return list.filter(i => i.invoice_number.toLowerCase().includes(query));
+  });
   readonly unpaidInvoices = computed(() => this.invoicesState().filter((invoice) => invoice.status !== 'paid'));
 
   async load(): Promise<void> {

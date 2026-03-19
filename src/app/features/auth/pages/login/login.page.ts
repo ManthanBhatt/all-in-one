@@ -10,6 +10,7 @@ import {
 } from '@ionic/angular/standalone';
 
 import { AuthService } from '../../../../core/auth/auth.service';
+import { SessionStore } from '../../../../core/auth/session.store';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -21,6 +22,7 @@ import { environment } from '../../../../../environments/environment';
 })
 export class LoginPage {
   private readonly authService = inject(AuthService);
+  private readonly sessionStore = inject(SessionStore);
   private readonly router = inject(Router);
 
   readonly email = signal('');
@@ -47,7 +49,7 @@ export class LoginPage {
       return;
     }
 
-    await this.router.navigateByUrl('/app/dashboard', { replaceUrl: true });
+    await this.router.navigateByUrl(this.sessionStore.getLandingRoute(), { replaceUrl: true });
   }
 
   protected checkSmallScreen() {

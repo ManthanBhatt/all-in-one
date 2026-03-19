@@ -20,6 +20,7 @@ const syncTables: SyncedTable[] = [
   'reminders',
   'time_entries',
   'invoices',
+  'counters',
 ];
 
 @Injectable({
@@ -37,6 +38,7 @@ export class SyncService {
 
   readonly indicatorState = signal<SyncIndicatorState>('idle');
   readonly indicatorLabel = signal('Local only');
+  readonly dataChanged$ = signal<SyncedTable | 'all' | null>(null);
 
   constructor() {
     effect(() => {
@@ -55,7 +57,7 @@ export class SyncService {
     });
   }
 
-  requestAutoSync(delayMs = 900): void {
+  requestAutoSync(delayMs = 900, entityType?: SyncedTable): void {
     if (this.autoSyncTimer) {
       globalThis.clearTimeout(this.autoSyncTimer);
     }
@@ -65,11 +67,11 @@ export class SyncService {
 
     this.autoSyncTimer = globalThis.setTimeout(() => {
       this.autoSyncTimer = null;
-      void this.syncNow();
+      void this.syncNow(entityType);
     }, delayMs);
   }
 
-  async syncNow(): Promise<{ synced: number; skipped: boolean }> {
+  async syncNow(entityType?: SyncedTable): Promise<{ synced: number; skipped: boolean }> {
     if (this.syncInFlight) {
       return this.syncInFlight;
     }
@@ -77,7 +79,7 @@ export class SyncService {
     this.indicatorState.set(this.connectivityService.isOnline() ? 'syncing' : 'offline');
     this.indicatorLabel.set(this.connectivityService.isOnline() ? 'Syncing' : 'Offline');
 
-    this.syncInFlight = this.performSync()
+    this.syncInFlight = this.performSync(entityType)
       .then((result) => {
         if (result.skipped) {
           this.indicatorState.set('offline');
@@ -112,7 +114,7 @@ export class SyncService {
     this.indicatorLabel.set('Local reset');
   }
 
-  private async performSync(): Promise<{ synced: number; skipped: boolean }> {
+  private async performSync(entityType?: SyncedTable): Promise<{ synced: number; skipped: boolean }> {
     const userId = this.sessionStore.userId();
     const client = getSupabaseClient();
 
@@ -121,7 +123,9 @@ export class SyncService {
     }
 
     const queue = (await this.queueService.list(userId)).filter(
-      (item) => item.queue_status === 'pending' || item.queue_status === 'failed',
+      (item) => 
+        (item.queue_status === 'pending' || item.queue_status === 'failed') &&
+        (!entityType || item.entity_type === entityType)
     );
 
     let syncedCount = 0;
@@ -136,7 +140,7 @@ export class SyncService {
       }
     }
 
-    syncedCount += await this.pullRemote(userId);
+    syncedCount += await this.pullRemote(userId, entityType);
     return { synced: syncedCount, skipped: false };
   }
 
@@ -161,11 +165,18 @@ export class SyncService {
     if (item.operation === 'insert') {
       const { error } = await client.from(table).insert(payload);
       if (error) {
+        console.error(`[SyncService] Insert failed for ${table}:`, error);
         throw error;
       }
     } else {
-      const { error } = await client.from(table).update(payload).eq('id', item.entity_id).eq('user_id', userId);
+      // For updates, we usually don't want to send the ID or user_id in the body
+      const updatePayload = { ...payload };
+      delete updatePayload['id'];
+      delete updatePayload['user_id'];
+
+      const { error } = await client.from(table).update(updatePayload).eq('id', item.entity_id).eq('user_id', userId);
       if (error) {
+        console.error(`[SyncService] Update failed for ${table}:`, error);
         throw error;
       }
     }
@@ -182,18 +193,25 @@ export class SyncService {
     }
   }
 
-  private async pullRemote(userId: string): Promise<number> {
+  private async pullRemote(userId: string, entityType?: SyncedTable): Promise<number> {
     const client = getSupabaseClient();
     if (!client) {
       return 0;
     }
 
     let count = 0;
+    const tablesToPull = entityType ? [entityType] : syncTables;
 
-    for (const table of syncTables) {
+    for (const table of tablesToPull) {
+      console.log(`[SyncService] Pulling remote data for ${table}...`);
       const { data, error } = await client.from(table).select('*').eq('user_id', userId);
       if (error || !data) {
+        console.error(`[SyncService] Pull failed for ${table}:`, error);
         continue;
+      }
+
+      if (data.length > 0) {
+        console.log(`[SyncService] Received ${data.length} remote records for ${table}`);
       }
 
       const existing = await this.db.list<EntityBase>(table);
@@ -224,6 +242,16 @@ export class SyncService {
       }
 
       await this.db.bulkUpsert<EntityBase>(table, [...byId.values()]);
+      
+      if (data.length > 0) {
+        console.log(`[SyncService] Updated local table ${table}. Final local count: ${byId.size}`);
+      }
+    }
+
+    if (count > 0) {
+      this.dataChanged$.set(entityType ?? 'all');
+      // Reset to null so next change triggers signal again even if it's the same type
+      setTimeout(() => this.dataChanged$.set(null), 50);
     }
 
     return count;

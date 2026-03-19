@@ -38,7 +38,7 @@ export abstract class BaseRepository<T extends EntityBase, TCreate extends objec
     } as T;
     await this.db.upsert<T>(this.table, record);
     await this.syncQueueService.enqueue(userId, this.table, record, 'insert');
-    this.syncService.requestAutoSync();
+    this.syncService.requestAutoSync(900, this.table);
     return record;
   }
 
@@ -55,7 +55,24 @@ export abstract class BaseRepository<T extends EntityBase, TCreate extends objec
 
     await this.db.upsert<T>(this.table, updated);
     await this.syncQueueService.enqueue(userId, this.table, updated, 'update');
-    this.syncService.requestAutoSync();
+    this.syncService.requestAutoSync(900, this.table);
+    return updated;
+  }
+
+  async updateLocal(userId: string, id: string, patch: Partial<T>): Promise<T | null> {
+    const existing = await this.get(userId, id);
+    if (!existing) {
+      return null;
+    }
+
+    const updated: T = stampEntityUpdate<T>({
+      ...existing,
+      ...patch,
+      is_dirty: true,
+      sync_status: 'pending',
+    });
+
+    await this.db.upsert<T>(this.table, updated);
     return updated;
   }
 
@@ -72,7 +89,7 @@ export abstract class BaseRepository<T extends EntityBase, TCreate extends objec
 
     await this.db.upsert<T>(this.table, deleted);
     await this.syncQueueService.enqueue(userId, this.table, deleted, 'delete');
-    this.syncService.requestAutoSync();
+    this.syncService.requestAutoSync(900, this.table);
   }
 
   protected abstract buildCreate(base: EntityBase, input: TCreate): T;

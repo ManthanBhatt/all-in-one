@@ -11,9 +11,24 @@ export class NotesFacade {
   private readonly sessionStore = inject(SessionStore);
   private readonly repository = inject(NotesRepository);
   private readonly notesState = signal<Note[]>([]);
+  readonly searchQuery = signal('');
 
-  readonly notes = computed(() => this.notesState());
-  readonly recentNotes = computed(() => this.notesState().slice(0, 5));
+  readonly notes = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const list = [...this.notesState()].sort((a, b) => {
+      if (a.is_pinned && !b.is_pinned) return -1;
+      if (!a.is_pinned && b.is_pinned) return 1;
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
+
+    if (!query) return list;
+    return list.filter(n => 
+      n.title?.toLowerCase().includes(query) || 
+      n.body.toLowerCase().includes(query)
+    );
+  });
+  readonly recentNotes = computed(() => this.notes().slice(0, 5));
+  readonly pinnedNotes = computed(() => this.notesState().filter(n => n.is_pinned));
 
   async load(): Promise<void> {
     const userId = this.sessionStore.userId();
@@ -23,6 +38,16 @@ export class NotesFacade {
     }
 
     this.notesState.set(await this.repository.list(userId));
+  }
+
+  async togglePin(note: Note): Promise<void> {
+    const userId = this.sessionStore.userId();
+    if (!userId) return;
+
+    await this.repository.update(userId, note.id, {
+      is_pinned: !note.is_pinned,
+    });
+    await this.load();
   }
 
   async create(input: { title?: string | null; body: string }): Promise<void> {
