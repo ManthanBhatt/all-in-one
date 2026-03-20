@@ -5,22 +5,21 @@ import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
+  IonCheckbox,
   IonContent,
   IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
   IonMenuButton,
   IonTitle,
   IonToggle,
   IonToolbar,
-  IonCheckbox,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonText,
 } from '@ionic/angular/standalone';
 
-import { SettingsFacade } from '../../settings.facade';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { SessionStore } from '../../../../core/auth/session.store';
+import { SettingsFacade } from '../../settings.facade';
 
 @Component({
   selector: 'app-settings',
@@ -32,17 +31,16 @@ import { SessionStore } from '../../../../core/auth/session.store';
     FormsModule,
     IonButton,
     IonButtons,
+    IonCheckbox,
     IonContent,
     IonHeader,
+    IonItem,
+    IonLabel,
+    IonList,
     IonMenuButton,
     IonTitle,
     IonToggle,
     IonToolbar,
-    IonCheckbox,
-    IonItem,
-    IonLabel,
-    IonList,
-    IonText,
   ],
 })
 export class SettingsPage {
@@ -65,22 +63,28 @@ export class SettingsPage {
     { id: 'time', label: 'Time', description: 'Tracked work' },
     { id: 'invoices', label: 'Invoices', description: 'Billing control' },
     { id: 'counters', label: 'Counters', description: 'Ultra-fast counting' },
+    { id: 'ai-assistant', label: 'AI Assistant', description: 'Workflow copilot' },
+    { id: 'ai-models', label: 'AI Models', description: 'Local model hub' },
   ];
 
   readonly selectedFeatures = computed(() => this.sessionStore.session().profile?.enabled_features ?? []);
   readonly featureUpdateError = signal<string | null>(null);
   readonly isUpdatingFeatures = signal(false);
 
-  async toggleFeature(id: string, checked: boolean) {
+  async toggleFeature(id: string, checked: boolean): Promise<void> {
     const current = this.selectedFeatures();
     let next: string[];
-    
+
     if (checked) {
-      if (current.includes(id)) return;
+      if (current.includes(id)) {
+        return;
+      }
       next = [...current, id];
     } else {
-      if (!current.includes(id)) return;
-      next = current.filter(f => f !== id);
+      if (!current.includes(id)) {
+        return;
+      }
+      next = current.filter((feature) => feature !== id);
     }
 
     if (next.length === 0) {

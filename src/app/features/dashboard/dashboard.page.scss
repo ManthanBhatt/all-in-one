@@ -1,4 +1,4 @@
-.collection-item {
+﻿.collection-item {
   cursor: pointer;
 }
 
@@ -9,4 +9,10 @@
 .collection-item--pinned {
   border-left: 3px solid var(--app-accent);
   background: rgba(79, 209, 181, 0.05);
+}
+
+@media (max-width: 900px) {
+  .workspace-card__value {
+    font-size: 1.6rem;
+  }
 }

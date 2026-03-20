@@ -35,7 +35,7 @@
             <p class="section-eyebrow">Ledger</p>
             <h3 class="workspace-card__title">Invoice list</h3>
           </div>
-          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add invoice</ion-button>
+          <ion-button class="page-create-button" (click)="openCreate()"><ion-icon slot="start" [icon]="addIcon"></ion-icon>New</ion-button>
         </div>
 
         <div class="collection" *ngIf="facade.invoices().length; else emptyState">
@@ -47,8 +47,8 @@
             <div class="collection-item__actions">
               <span class="collection-item__badge">{{ invoice.status }}</span>
               <ion-button size="small" fill="clear" (click)="facade.markPaid(invoice)">{{ invoice.status === 'paid' ? 'Unpay' : 'Paid' }}</ion-button>
-              <ion-button size="small" fill="clear" (click)="openEdit(invoice)">Edit</ion-button>
-              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(invoice.id)">Delete</ion-button>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(invoice)"><ion-icon slot="icon-only" [icon]="editIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(invoice.id)"><ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon></ion-button>
             </div>
           </div>
         </div>
@@ -97,3 +97,4 @@
     </ng-template>
   </ion-modal>
 </ion-content>
+

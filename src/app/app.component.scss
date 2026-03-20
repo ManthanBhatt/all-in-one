@@ -5,33 +5,41 @@
   display: grid;
   place-items: center;
   padding: 1.5rem;
-  background: rgba(4, 8, 13, 0.88);
-  backdrop-filter: blur(18px);
+  background: rgba(0, 0, 0, 0.84);
+  backdrop-filter: blur(12px);
 }
 
 .app-lock__card {
   width: min(26rem, calc(100vw - 2rem));
   padding: 1.5rem;
-  border-radius: 28px;
-  background: linear-gradient(180deg, #131c25 0%, #0f151d 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 36px 80px rgba(0, 0, 0, 0.46);
-  color: #f6f9fc;
+  border-radius: 24px;
+  background: #050505;
+  border: 1px solid var(--app-border-strong);
+  box-shadow: var(--app-shadow-lg);
+  color: #fafafa;
 }
 
-.app-lock__logo {
-  width: 3.5rem;
-  height: 3.5rem;
-  display: block;
+.app-lock__wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   margin-bottom: 1rem;
+}
+
+.app-lock__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
 }
 
 .app-lock__eyebrow {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   font-size: 0.72rem;
-  color: #f1c75b;
+  color: #d4d4d8;
 }
 
 .app-lock__card h2 {
@@ -40,23 +48,23 @@
 
 .app-lock__copy {
   margin: 0 0 1rem;
-  color: #a6b5c4;
+  color: var(--app-copy-muted);
 }
 
 .app-lock__field span {
   display: block;
   margin-bottom: 0.45rem;
-  color: #c7d3de;
+  color: #e4e4e7;
   font-size: 0.88rem;
   font-weight: 600;
 }
 
 .app-lock__field ion-input {
-  --background: #111922;
-  --border-color: rgba(255, 255, 255, 0.12);
-  --border-radius: 14px;
-  --color: #f3f7fb;
-  --placeholder-color: #738394;
+  --background: #0a0a0a;
+  --border-color: var(--app-border);
+  --border-radius: 12px;
+  --color: #fafafa;
+  --placeholder-color: #71717a;
   min-height: 3.4rem;
 }
 

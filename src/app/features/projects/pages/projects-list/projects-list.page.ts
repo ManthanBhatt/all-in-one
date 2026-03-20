@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar } from '@ionic/angular/standalone';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar } from '@ionic/angular/standalone';
+import { addOutline, createOutline, trashOutline } from 'ionicons/icons';
 
 import { Project, ProjectStatus } from '../../../../core/models/domain.models';
 import { ClientsFacade } from '../../../clients/clients.facade';
@@ -14,12 +15,17 @@ import { ProjectsFacade } from '../../projects.facade';
   templateUrl: './projects-list.page.html',
   styleUrls: ['./projects-list.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar],
+  imports: [CommonModule, FormsModule, RouterLink, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar],
 })
 export class ProjectsListPage implements OnInit {
   readonly facade = inject(ProjectsFacade);
   readonly clientsFacade = inject(ClientsFacade);
   readonly tasksFacade = inject(TasksFacade);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly addIcon = addOutline;
+  readonly editIcon = createOutline;
+  readonly deleteIcon = trashOutline;
 
   readonly name = signal('');
   readonly clientId = signal('');
@@ -30,6 +36,9 @@ export class ProjectsListPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await Promise.all([this.facade.load(), this.clientsFacade.load(), this.tasksFacade.load()]);
+    this.route.queryParamMap.subscribe((params) => {
+      void this.handleRouteIntent(params.get('focus'), params.get('edit') === '1');
+    });
   }
 
   clientName(clientId: string | null): string {
@@ -83,6 +92,28 @@ export class ProjectsListPage implements OnInit {
     await this.facade.setStatus(project.id, nextStatus as ProjectStatus);
   }
 
+  private async handleRouteIntent(focusId: string | null, shouldEdit: boolean): Promise<void> {
+    if (!focusId) {
+      return;
+    }
+
+    const project = this.facade.projects().find((item) => item.id === focusId);
+    if (project && shouldEdit) {
+      this.openEdit(project);
+    }
+
+    await this.clearRouteIntent();
+  }
+
+  private async clearRouteIntent(): Promise<void> {
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { focus: null, edit: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
   private resetProjectForm(): void {
     this.editingId.set(null);
     this.name.set('');
@@ -91,3 +122,6 @@ export class ProjectsListPage implements OnInit {
     this.errorMessage.set(null);
   }
 }
+
+
+

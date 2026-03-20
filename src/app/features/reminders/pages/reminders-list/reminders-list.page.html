@@ -35,7 +35,7 @@
             <p class="section-eyebrow">Schedule</p>
             <h3 class="workspace-card__title">Reminder timeline</h3>
           </div>
-          <ion-button fill="outline" class="surface-button" (click)="openCreate()" *ngIf="currentTab() === 'scheduled'">Add reminder</ion-button>
+          <ion-button class="page-create-button" (click)="openCreate()" *ngIf="currentTab() === 'scheduled'"><ion-icon slot="start" [icon]="addIcon"></ion-icon>New</ion-button>
         </div>
 
         <ion-segment [value]="currentTab()" (ionChange)="currentTab.set($any($event).detail.value)" style="margin-bottom: 1.5rem;">
@@ -55,9 +55,9 @@
             </div>
             <div class="collection-item__actions">
               <span class="collection-item__badge" [class.collection-item__badge--warning]="facade.reminderStateTone(reminder) === 'warning'" [class.collection-item__badge--danger]="facade.reminderStateTone(reminder) === 'danger'">{{ facade.reminderStateLabel(reminder) }}</span>
-              <ion-button size="small" fill="clear" (click)="facade.complete(reminder)">Complete</ion-button>
-              <ion-button size="small" fill="clear" (click)="openEdit(reminder)">Edit</ion-button>
-              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(reminder.id)">Delete</ion-button>
+              <ion-button size="small" fill="clear" (click)="facade.complete(reminder)"><ion-icon slot="start" [icon]="completeIcon"></ion-icon>Complete</ion-button>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(reminder)"><ion-icon slot="icon-only" [icon]="editIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(reminder.id)"><ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon></ion-button>
             </div>
           </div>
           <div class="empty-state" *ngIf="facade.scheduledReminders().length === 0">No scheduled reminders.</div>
@@ -71,7 +71,7 @@
             </div>
             <div class="collection-item__actions">
               <span class="collection-item__badge collection-item__badge--success">Completed</span>
-              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(reminder.id)">Delete</ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(reminder.id)"><ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon></ion-button>
             </div>
           </div>
           <div class="empty-state" *ngIf="facade.completedReminders().length === 0">No completed reminders yet.</div>
@@ -109,3 +109,4 @@
     </ng-template>
   </ion-modal>
 </ion-content>
+

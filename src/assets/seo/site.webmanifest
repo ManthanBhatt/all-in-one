@@ -1,6 +1,6 @@
 {
-  "name": "Freelancer OS",
-  "short_name": "Freelancer OS",
+  "name": "Essentials",
+  "short_name": "Essentials",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a1118",
@@ -21,3 +21,4 @@
     }
   ]
 }
+

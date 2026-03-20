@@ -13,39 +13,52 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-progress-bar *ngIf="facade.currentCounter()?.target_value" [value]="progress()" color="primary"></ion-progress-bar>
+  <ion-progress-bar *ngIf="facade.currentCounter()?.target_value" [value]="progress()" color="success"></ion-progress-bar>
 </ion-header>
 
 <ion-content scrollY="false">
-  <div class="counter-tap-area" 
-    (mousedown)="startAutoIncrement()" 
-    (mouseup)="stopAutoIncrement()" 
-    (mouseleave)="stopAutoIncrement()"
-    (touchstart)="startAutoIncrement()" 
-    (touchend)="stopAutoIncrement()"
-    (click)="increment()">
-    
-    <div class="counter-display">
-      <div class="counter-value">
-        {{ facade.currentCounter()?.current_value }}
+  <div class="counter-stage">
+    <div class="counter-celebration" *ngIf="isCelebrating() || targetReached()">
+      <div class="counter-celebration__badge">
+        <ion-icon [icon]="targetReached() ? completeIcon : celebrateIcon"></ion-icon>
+        <span>{{ targetReached() ? 'Target reached' : 'Milestone hit' }}</span>
       </div>
-      <div class="target-indicator" *ngIf="facade.currentCounter()?.target_value">
-        Target: {{ facade.currentCounter()?.target_value }}
+      <h2>{{ targetReached() ? 'Count complete' : 'Nice work' }}</h2>
+      <p *ngIf="targetReached()">You hit the target for {{ facade.currentCounter()?.name }}.</p>
+    </div>
+
+    <div
+      class="counter-tap-area"
+      [class.counter-tap-area--complete]="targetReached()"
+      (pointerdown)="beginPress($event)"
+      (pointerup)="endPress($event)"
+      (pointercancel)="cancelPress($event)"
+      (pointerleave)="cancelPress($event)">
+
+      <div class="counter-shell">
+        <p class="section-eyebrow">Counter</p>
+        <div class="counter-value">{{ facade.currentCounter()?.current_value ?? 0 }}</div>
+        <div class="counter-meta" *ngIf="facade.currentCounter() as counter">
+          <div class="counter-meta__chip" *ngIf="counter.target_value">
+            <span>Target</span>
+            <strong>{{ counter.target_value }}</strong>
+          </div>
+          <div class="counter-meta__chip" *ngIf="remaining() !== null && !targetReached()">
+            <span>Remaining</span>
+            <strong>{{ remaining() }}</strong>
+          </div>
+        </div>
+        <p class="tap-hint">Tap once to add one. Press and hold to accelerate.</p>
       </div>
     </div>
 
-    <div class="tap-hint">Tap anywhere to count</div>
+    <div class="counter-toolbar">
+      <ion-button fill="outline" class="surface-button" (click)="decrement($event)">
+        <ion-icon slot="icon-only" [icon]="removeIcon"></ion-icon>
+      </ion-button>
+      <ion-button fill="outline" class="surface-button" color="medium" (click)="confirmReset($event)">
+        <ion-icon slot="icon-only" [icon]="resetIcon"></ion-icon>
+      </ion-button>
+    </div>
   </div>
-
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="danger" (click)="confirmReset($event)">
-      <ion-icon [icon]="resetIcon"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-  <ion-fab slot="fixed" vertical="bottom" horizontal="start">
-    <ion-fab-button color="medium" (click)="decrement($event)">
-      <ion-icon [icon]="removeIcon"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>

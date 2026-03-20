@@ -1,36 +1,36 @@
 :root {
-  --ion-font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
-  --ion-background-color: #0b1014;
-  --ion-text-color: #edf3f7;
-  --ion-color-primary: #ff7a59;
-  --ion-color-primary-rgb: 255, 122, 89;
-  --ion-color-primary-contrast: #130d0b;
-  --ion-color-primary-shade: #e06b4e;
-  --ion-color-primary-tint: #ff896c;
+  --ion-font-family: "Inter", "Segoe UI", "SF Pro Text", sans-serif;
+  --ion-background-color: #000000;
+  --ion-text-color: #fafafa;
+  --ion-color-primary: #ffffff;
+  --ion-color-primary-rgb: 255, 255, 255;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-shade: #d4d4d4;
+  --ion-color-primary-tint: #ffffff;
 
-  --ion-color-secondary: #3dc6b5;
-  --ion-color-secondary-rgb: 61, 198, 181;
-  --ion-color-secondary-contrast: #061211;
-  --ion-color-secondary-shade: #36ae9f;
-  --ion-color-secondary-tint: #50ccbc;
+  --ion-color-secondary: #a1a1aa;
+  --ion-color-secondary-rgb: 161, 161, 170;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-shade: #8b8b94;
+  --ion-color-secondary-tint: #b5b5bc;
 
-  --ion-color-tertiary: #f1c75b;
-  --ion-color-tertiary-rgb: 241, 199, 91;
-  --ion-color-tertiary-contrast: #151108;
-  --ion-color-tertiary-shade: #d4af50;
-  --ion-color-tertiary-tint: #f3ce6c;
+  --ion-color-tertiary: #6ee7b7;
+  --ion-color-tertiary-rgb: 110, 231, 183;
+  --ion-color-tertiary-contrast: #03130d;
+  --ion-color-tertiary-shade: #61cca1;
+  --ion-color-tertiary-tint: #80ebc0;
 
-  --app-bg: linear-gradient(180deg, #0b1014 0%, #111922 100%);
-  --app-surface: rgba(20, 28, 36, 0.82);
-  --app-surface-strong: #161f29;
-  --app-surface-muted: #101821;
+  --app-bg: #000000;
+  --app-surface: #0a0a0a;
+  --app-surface-strong: #111111;
+  --app-surface-muted: #171717;
   --app-border: rgba(255, 255, 255, 0.08);
-  --app-border-strong: rgba(255, 255, 255, 0.16);
-  --app-copy: #edf3f7;
-  --app-copy-muted: #98a8b7;
-  --app-shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.34);
-  --app-shadow-md: 0 16px 34px rgba(0, 0, 0, 0.24);
-  --app-radius-xl: 28px;
-  --app-radius-lg: 22px;
-  --app-radius-md: 16px;
+  --app-border-strong: rgba(255, 255, 255, 0.14);
+  --app-copy: #fafafa;
+  --app-copy-muted: #a1a1aa;
+  --app-shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.32);
+  --app-shadow-md: 0 12px 28px rgba(0, 0, 0, 0.18);
+  --app-radius-xl: 24px;
+  --app-radius-lg: 20px;
+  --app-radius-md: 14px;
 }

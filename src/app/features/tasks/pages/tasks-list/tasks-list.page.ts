@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar, IonSearchbar } from '@ionic/angular/standalone';
-import { createOutline, trashOutline } from 'ionicons/icons';
+import { addOutline, createOutline, trashOutline } from 'ionicons/icons';
 
 import { Task, TaskStatus } from '../../../../core/models/domain.models';
 import { ClientsFacade } from '../../../clients/clients.facade';
@@ -20,6 +21,9 @@ export class TasksListPage implements OnInit {
   readonly facade = inject(TasksFacade);
   readonly projectsFacade = inject(ProjectsFacade);
   readonly clientsFacade = inject(ClientsFacade);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly addIcon = addOutline;
   readonly createIcon = createOutline;
   readonly trashIcon = trashOutline;
 
@@ -35,6 +39,9 @@ export class TasksListPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await Promise.all([this.facade.load(), this.projectsFacade.load(), this.clientsFacade.load()]);
+    this.route.queryParamMap.subscribe((params) => {
+      void this.handleRouteIntent(params.get('focus'), params.get('edit') === '1');
+    });
   }
 
   openCreate(): void {
@@ -126,6 +133,28 @@ export class TasksListPage implements OnInit {
     this.closeModal();
   }
 
+  private async handleRouteIntent(focusId: string | null, shouldEdit: boolean): Promise<void> {
+    if (!focusId) {
+      return;
+    }
+
+    const task = this.facade.tasks().find((item) => item.id === focusId);
+    if (task && shouldEdit) {
+      this.openEdit(task);
+    }
+
+    await this.clearRouteIntent();
+  }
+
+  private async clearRouteIntent(): Promise<void> {
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { focus: null, edit: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
   private resetForm(): void {
     this.editingId.set(null);
     this.title.set('');
@@ -145,3 +174,5 @@ export class TasksListPage implements OnInit {
     return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 16);
   }
 }
+
+

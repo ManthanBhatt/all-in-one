@@ -1,22 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
   IonContent,
   IonHeader,
-  IonModal,
+  IonIcon,
   IonMenuButton,
+  IonModal,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
-  IonIcon,
-  IonFab,
-  IonFabButton,
-  IonSearchbar,
 } from '@ionic/angular/standalone';
-import { addOutline, chevronForwardOutline, trashOutline, createOutline } from 'ionicons/icons';
+import { chevronForwardOutline, createOutline, sparklesOutline, trashOutline } from 'ionicons/icons';
 
 import { CountersFacade } from '../../counters.facade';
 import { Counter } from '../../../../core/models/domain.models';
@@ -29,29 +27,26 @@ import { Counter } from '../../../../core/models/domain.models';
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     IonButton,
     IonButtons,
     IonContent,
     IonHeader,
-    IonModal,
+    IonIcon,
     IonMenuButton,
+    IonModal,
+    IonSearchbar,
     IonTitle,
     IonToolbar,
-    IonIcon,
-    IonFab,
-    IonFabButton,
-    IonSearchbar,
   ],
 })
 export class CountersListPage implements OnInit {
   readonly facade = inject(CountersFacade);
   private readonly router = inject(Router);
 
-  readonly addIcon = addOutline;
   readonly chevronIcon = chevronForwardOutline;
   readonly deleteIcon = trashOutline;
   readonly editIcon = createOutline;
+  readonly createAccentIcon = sparklesOutline;
 
   readonly name = signal('');
   readonly initialValue = signal(0);
@@ -68,6 +63,7 @@ export class CountersListPage implements OnInit {
   openCreate(): void {
     this.name.set('');
     this.initialValue.set(0);
+    this.currentValue.set(0);
     this.targetValue.set(null);
     this.editingId.set(null);
     this.errorMessage.set(null);
@@ -100,18 +96,13 @@ export class CountersListPage implements OnInit {
         await this.facade.updateCounter(editingId, this.name().trim(), this.currentValue(), this.targetValue());
         this.isModalOpen.set(false);
       } else {
-        const counter = await this.facade.createCounter(
-          this.name().trim(), 
-          this.initialValue(), 
-          this.targetValue()
-        );
+        const counter = await this.facade.createCounter(this.name().trim(), this.initialValue(), this.targetValue());
         this.isModalOpen.set(false);
-        // Small delay to let modal closing animation start/finish before navigating
         setTimeout(() => {
           void this.router.navigate(['/app/counters', counter.id]);
         }, 100);
       }
-    } catch (e) {
+    } catch {
       this.errorMessage.set('Failed to save counter.');
     }
   }
@@ -123,5 +114,13 @@ export class CountersListPage implements OnInit {
 
   goToCounter(id: string): void {
     void this.router.navigate(['/app/counters', id]);
+  }
+
+  completionRatio(counter: Counter): number | null {
+    if (!counter.target_value || counter.target_value <= 0) {
+      return null;
+    }
+
+    return Math.min(100, Math.round((counter.current_value / counter.target_value) * 100));
   }
 }

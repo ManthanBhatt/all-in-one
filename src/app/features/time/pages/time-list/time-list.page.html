@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Time</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openCreate()">Log time</ion-button>
+      <ion-button class="page-create-button" (click)="openCreate()"><ion-icon slot="start" [icon]="addIcon"></ion-icon>New</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -30,7 +30,7 @@
             <p class="section-eyebrow">Logs</p>
             <h3 class="workspace-card__title">Recent time entries</h3>
           </div>
-          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add entry</ion-button>
+          <ion-button class="page-create-button" (click)="openCreate()"><ion-icon slot="start" [icon]="addIcon"></ion-icon>New</ion-button>
         </div>
 
         <div class="collection" *ngIf="facade.entries().length; else emptyState">
@@ -40,8 +40,8 @@
               <p class="collection-item__meta">{{ entry.duration_minutes || 0 }} minutes</p>
             </div>
             <div class="collection-item__actions">
-              <ion-button size="small" fill="clear" (click)="openEdit(entry)">Edit</ion-button>
-              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(entry.id)">Delete</ion-button>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(entry)"><ion-icon slot="icon-only" [icon]="editIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(entry.id)"><ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon></ion-button>
             </div>
           </div>
         </div>
@@ -86,3 +86,4 @@
     </ng-template>
   </ion-modal>
 </ion-content>
+

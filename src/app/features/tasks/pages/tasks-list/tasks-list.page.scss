@@ -1,4 +1,4 @@
-.collection--stack {
+﻿.collection--stack {
   align-content: start;
 }
 
@@ -43,4 +43,18 @@
 
 .task-card:active {
   cursor: grabbing;
+}
+
+@media (max-width: 900px) {
+  .task-inline-select {
+    min-width: 0;
+  }
+
+  .task-card {
+    padding-bottom: 0.35rem;
+  }
+
+  .task-lane {
+    min-width: 0;
+  }
 }

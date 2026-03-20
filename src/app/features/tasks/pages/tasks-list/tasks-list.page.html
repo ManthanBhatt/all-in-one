@@ -6,6 +6,12 @@
     <ion-title>Tasks</ion-title>
   </ion-toolbar>
   <ion-toolbar class="search-toolbar">
+    <ion-buttons slot="end">
+      <ion-button class="page-create-button" (click)="openCreate()">
+        <ion-icon slot="start" [icon]="addIcon"></ion-icon>
+        New
+      </ion-button>
+    </ion-buttons>
     <ion-searchbar 
       [value]="facade.searchQuery()" 
       (ionInput)="facade.searchQuery.set($any($event).target.value ?? '')" 
@@ -56,7 +62,14 @@
             </div>
           </div>
         </div>
-        <ng-template #emptyPlanning><div class="empty-state">No planning tasks.</div></ng-template>
+        <ng-template #emptyPlanning><div class="empty-state">No planning tasks.
+          <div class="page-actions">
+            <ion-button class="page-create-button page-create-button--large" (click)="openCreate()">
+              <ion-icon slot="start" [icon]="addIcon"></ion-icon>
+              New task
+            </ion-button>
+          </div>
+        </div></ng-template>
       </article>
 
       <article class="workspace-card workspace-card--span-4 task-lane" [class.task-lane--active]="dropStatus() === 'in_flight'" (dragover)="onDragOver($event, 'in_flight')" (dragleave)="onDragLeave('in_flight')" (drop)="onDrop('in_flight')">
@@ -215,3 +228,4 @@
     </ng-template>
   </ion-modal>
 </ion-content>
+

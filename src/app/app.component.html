@@ -3,9 +3,12 @@
 
   <div class="app-lock" *ngIf="appLock.isLocked()">
     <div class="app-lock__card">
-      <img src="assets/brand/logo-mark.svg" alt="Freelancer OS" class="app-lock__logo">
+      <div class="app-lock__wordmark">
+        <span class="app-lock__dot"></span>
+        <strong>Essentials</strong>
+      </div>
       <p class="app-lock__eyebrow">Security</p>
-      <h2>Unlock Freelancer OS</h2>
+      <h2>Unlock Essentials</h2>
       <p class="app-lock__copy">This workspace is protected. Enter your PIN to continue.</p>
 
       <label class="app-lock__field" *ngIf="appLock.hasWebPin()">

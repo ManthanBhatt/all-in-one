@@ -1,15 +1,14 @@
-<ion-split-pane contentId="main-content" when="lg">
+﻿<ion-split-pane contentId="main-content" when="lg">
   <ion-menu contentId="main-content" type="overlay">
     <ion-header class="ion-no-border">
       <ion-toolbar class="ion-no-border">
-        <ion-title>Freelancer OS</ion-title>
+        <ion-title>Essentials</ion-title>
 
         <div class="shell-sync-status" [class.shell-sync-status--syncing]="indicatorState() === 'syncing'"
           [class.shell-sync-status--synced]="indicatorState() === 'synced'"
           [class.shell-sync-status--offline]="indicatorState() === 'offline'"
           [class.shell-sync-status--error]="indicatorState() === 'error'" slot="end">
           <ion-icon [icon]="syncIcons[indicatorState()]" [class.spin]="indicatorState() === 'syncing'" slot="icon-only"></ion-icon>
-          <!-- <span>{{ indicatorLabel() }}</span> -->
         </div>
       </ion-toolbar>
     </ion-header>
@@ -17,7 +16,13 @@
       <div class="shell-panel">
         <div class="shell-brand">
           <div class="shell-brand__top">
-            <img src="assets/brand/logo-lockup.svg" alt="Freelancer OS" class="shell-brand__logo">
+            <div class="shell-wordmark">
+              <span class="shell-wordmark__dot"></span>
+              <div>
+                <strong>Essentials</strong>
+                <small>Personal operating system</small>
+              </div>
+            </div>
             <div class="shell-status-wrap">
               <app-offline-banner></app-offline-banner>
             </div>
@@ -25,10 +30,10 @@
         </div>
 
         <div class="shell-search">
-          <ion-searchbar 
-            [value]="searchService.query()" 
-            (ionInput)="searchService.query.set($any($event).target.value ?? '')" 
-            placeholder="Global search..."
+          <ion-searchbar
+            [value]="searchService.query()"
+            (ionInput)="searchService.query.set($any($event).target.value ?? '')"
+            placeholder="Search everything"
             class="global-searchbar"
           ></ion-searchbar>
           <div class="global-results" *ngIf="searchService.results().length > 0">
@@ -59,5 +64,7 @@
     </ion-content>
   </ion-menu>
 
+
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-split-pane>
+

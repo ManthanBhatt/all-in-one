@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonApp, IonButton, IonInput, IonRouterOutlet, IonText } from '@ionic/angular/standalone';
 
 import { AuthService } from './core/auth/auth.service';
+import { LocalNotificationService } from './core/notifications/local-notification.service';
 import { AppLockService } from './core/security/app-lock.service';
 import { AppTitleService } from './core/services/app-title.service';
 
@@ -16,12 +17,14 @@ import { AppTitleService } from './core/services/app-title.service';
 export class AppComponent {
   private readonly authService = inject(AuthService);
   private readonly appTitleService = inject(AppTitleService);
+  private readonly notifications = inject(LocalNotificationService);
   readonly appLock = inject(AppLockService);
   readonly pin = signal('');
 
   constructor() {
     void this.authService.restoreSession();
     void this.appTitleService;
+    void this.notifications;
     void this.appLock;
   }
 

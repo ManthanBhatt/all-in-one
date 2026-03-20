@@ -35,7 +35,7 @@
             <p class="section-eyebrow">Notebook</p>
             <h3 class="workspace-card__title">Recent notes</h3>
           </div>
-          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add note</ion-button>
+          <ion-button class="page-create-button" (click)="openCreate()"><ion-icon slot="start" [icon]="addIcon"></ion-icon>New</ion-button>
         </div>
 
         <div class="collection" *ngIf="facade.notes().length; else emptyState">
@@ -48,11 +48,11 @@
               <p class="collection-item__meta">{{ note.body }}</p>
             </div>
             <div class="collection-item__actions">
-              <ion-button size="small" fill="clear" (click)="togglePin(note, $event)">
+              <ion-button size="small" fill="clear" class="icon-action" (click)="togglePin(note, $event)">
                 <ion-icon slot="icon-only" [icon]="note.is_pinned ? pinnedIcon : pinIcon"></ion-icon>
               </ion-button>
-              <ion-button size="small" fill="clear" (click)="openEdit(note)">Edit</ion-button>
-              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(note.id)">Delete</ion-button>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(note)"><ion-icon slot="icon-only" [icon]="editIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(note.id)"><ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon></ion-button>
             </div>
           </div>
         </div>
@@ -93,3 +93,4 @@
     </ng-template>
   </ion-modal>
 </ion-content>
+

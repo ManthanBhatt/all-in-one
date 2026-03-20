@@ -45,11 +45,29 @@ ion-content {
   max-width: 40rem;
 }
 
-.auth-brand-mark {
-  width: min(100%, 14rem);
-  height: auto;
-  display: block;
+.auth-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   margin-bottom: 1rem;
+}
+
+.auth-wordmark__dot {
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+}
+
+.auth-wordmark strong,
+.auth-wordmark small {
+  display: block;
+}
+
+.auth-wordmark small {
+  color: var(--auth-muted);
+  font-size: 0.8rem;
 }
 
 .auth-brand,
@@ -186,5 +204,6 @@ ion-input {
     font-size: 2.8rem;
   }
 }
+
 
 

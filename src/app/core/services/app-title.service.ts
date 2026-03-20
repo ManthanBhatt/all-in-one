@@ -94,7 +94,7 @@ export class AppTitleService {
       return localPart;
     }
 
-    return 'Freelancer OS';
+    return 'Essentials';
   }
 
   private resolveDescription(section: string): string {
@@ -102,7 +102,7 @@ export class AppTitleService {
       case 'Login':
         return 'Sign in to your offline-first freelancer workspace for clients, tasks, reminders, invoices, and projects.';
       case 'Register':
-        return 'Create your Freelancer OS account to manage clients, projects, tasks, reminders, time entries, and invoices.';
+        return 'Create your Essentials account to manage clients, projects, tasks, reminders, time entries, and invoices.';
       case 'Dashboard':
         return 'View your freelance control center with active clients, projects, open tasks, reminders, and billing visibility.';
       case 'Clients':
@@ -120,14 +120,14 @@ export class AppTitleService {
       case 'Invoices':
         return 'Create and manage invoices in your offline-first freelance billing workflow.';
       case 'Settings':
-        return 'Control sync, account state, and workspace settings for Freelancer OS.';
+        return 'Control sync, account state, and workspace settings for Essentials.';
       default:
         return 'Offline-first freelancer workspace for clients, projects, tasks, notes, reminders, time tracking, and invoices.';
     }
   }
 
   private resolveCanonicalUrl(): string {
-    const origin = this.document.location?.origin ?? 'https://freelancer-os.app';
+    const origin = this.document.location?.origin ?? 'https://essentials.app';
     const path = this.router.url || '/';
     return `${origin}${path}`;
   }
@@ -143,3 +143,4 @@ export class AppTitleService {
     link.setAttribute('href', url);
   }
 }
+

@@ -1,5 +1,5 @@
 ion-menu {
-  --width: 22rem;
+  --width: 20rem;
   --background: transparent;
   --border: 0px;
 }
@@ -7,15 +7,13 @@ ion-menu {
 .shell-panel {
   min-height: 100%;
   padding: 1rem;
-  background: linear-gradient(180deg, rgba(20, 34, 46, 0.98), rgba(18, 54, 57, 0.96));
-  color: #fff8ef;
+  background: #030303;
+  color: var(--app-copy);
+  border-right: 1px solid var(--app-border);
 }
 
 .shell-brand {
-  padding: 1.1rem;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 0 0.25rem;
 }
 
 .shell-brand__top {
@@ -25,10 +23,33 @@ ion-menu {
   gap: 0.75rem;
 }
 
-.shell-brand__logo {
-  width: min(100%, 10.5rem);
-  height: auto;
+.shell-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.shell-wordmark__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+}
+
+.shell-wordmark strong,
+.shell-wordmark small {
   display: block;
+}
+
+.shell-wordmark strong {
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+
+.shell-wordmark small {
+  color: var(--app-copy-muted);
+  font-size: 0.76rem;
 }
 
 .shell-status-wrap {
@@ -41,84 +62,76 @@ ion-menu {
 .shell-sync-status {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.75rem;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 248, 239, 0.82);
-  font-size: 0.78rem;
-  font-weight: 700;
+  background: #111111;
+  border: 1px solid var(--app-border);
+  color: #d4d4d8;
 }
 
-.shell-sync-status--syncing { color: #ffd486; }
-.shell-sync-status--synced { color: #8ff5c1; }
-.shell-sync-status--offline { color: #9db0c2; }
-.shell-sync-status--error { color: #ff9e9e; }
+.shell-sync-status--syncing { color: #facc15; }
+.shell-sync-status--synced { color: #86efac; }
+.shell-sync-status--offline { color: #a1a1aa; }
+.shell-sync-status--error { color: #fca5a5; }
+.shell-sync-status ion-icon { font-size: 0.95rem; }
+.shell-sync-status ion-icon.spin { animation: shell-spin 1s linear infinite; }
 
-.shell-sync-status ion-icon {
+.shell-search {
+  margin-top: 1.1rem;
+  position: relative;
+}
+
+.shell-search .global-searchbar {
+  --background: #0a0a0a;
+  --border-radius: 14px;
+  --color: #fafafa;
+  --placeholder-color: #71717a;
+  --icon-color: #71717a;
+  padding: 0;
+}
+
+.shell-search .global-results {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: #0a0a0a;
+  border: 1px solid var(--app-border);
+  border-radius: 16px;
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.shell-search .global-results ion-list {
+  background: transparent;
+  padding: 0;
+}
+
+.shell-search .global-results ion-item {
+  --background: transparent;
+  --color: #fafafa;
+  --padding-start: 1rem;
+  --inner-padding-end: 1rem;
+}
+
+.shell-search .global-results ion-item h3 {
+  font-weight: 600;
+  margin: 0 0 2px;
   font-size: 0.95rem;
 }
 
-.shell-sync-status ion-icon.spin {
-  animation: shell-spin 1s linear infinite;
-}
-
-.shell-search {
-  margin-top: 1.5rem;
-  position: relative;
-
-  .global-searchbar {
-    --background: rgba(255, 255, 255, 0.05);
-    --border-radius: 12px;
-    --color: #fff;
-    --placeholder-color: rgba(255, 255, 255, 0.5);
-    --icon-color: rgba(255, 255, 255, 0.5);
-    padding: 0;
-  }
-
-  .global-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #1a2a2a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    z-index: 1000;
-    max-height: 250px;
-    overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-
-    ion-list {
-      background: transparent;
-      padding: 0;
-    }
-
-    ion-item {
-      --background: transparent;
-      --color: #fff;
-      --padding-start: 1rem;
-      --inner-padding-end: 1rem;
-
-      h3 {
-        font-weight: 600;
-        margin: 0 0 2px 0;
-        font-size: 0.95rem;
-      }
-
-      p {
-        margin: 0;
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.6);
-      }
-    }
-  }
+.shell-search .global-results ion-item p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--app-copy-muted);
 }
 
 .shell-nav {
   display: grid;
-  gap: 0.7rem;
+  gap: 0.2rem;
   margin-top: 1rem;
 }
 
@@ -126,45 +139,56 @@ ion-menu {
   display: flex;
   gap: 0.85rem;
   align-items: center;
-  padding: 0.9rem 1rem;
-  border-radius: 18px;
+  padding: 0.8rem 0.9rem;
+  border-radius: 14px;
   text-decoration: none;
-  color: rgba(255, 248, 239, 0.88);
+  color: var(--app-copy);
   border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.03);
+  background: transparent;
+}
+
+.shell-link:hover {
+  background: #0a0a0a;
+  border-color: var(--app-border);
 }
 
 .shell-link__tag {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
-  color: #f3c66f;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  background: #0a0a0a;
+  color: #fafafa;
+  border: 1px solid var(--app-border);
   flex: 0 0 auto;
 }
 
-.shell-link__tag ion-icon { font-size: 1.05rem; }
+.shell-link__tag ion-icon { font-size: 1rem; }
 
-.shell-link__copy { display: grid; }
-.shell-link__copy strong { font-size: 0.98rem; }
+.shell-link__copy {
+  display: grid;
+}
+
+.shell-link__copy strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .shell-link__copy small {
-  color: rgba(255, 248, 239, 0.6);
-  font-size: 0.8rem;
+  color: var(--app-copy-muted);
+  font-size: 0.78rem;
 }
 
 .shell-link--active {
-  background: var(--ion-color-dark);
-  border-color: rgba(243, 198, 111, 0.24);
+  background: #0a0a0a;
+  border-color: var(--app-border);
 }
 
 .shell-link--active .shell-link__tag {
-  background: linear-gradient(180deg, rgba(243, 198, 111, 0.22), rgba(217, 93, 57, 0.16));
-  color: #ffd486;
-  border-color: rgba(243, 198, 111, 0.18);
+  background: #111111;
+  border-color: var(--app-border-strong);
 }
 
 @keyframes shell-spin {

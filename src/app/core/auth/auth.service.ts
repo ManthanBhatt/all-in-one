@@ -9,7 +9,7 @@ interface AuthActionResult {
   message?: string;
 }
 
-const ALL_FEATURES = ['dashboard', 'clients', 'projects', 'tasks', 'notes', 'reminders', 'time', 'invoices', 'counters'];
+const ALL_FEATURES = ['dashboard', 'clients', 'projects', 'tasks', 'notes', 'reminders', 'time', 'invoices', 'counters', 'ai-assistant', 'ai-models'];
 
 @Injectable({
   providedIn: 'root',

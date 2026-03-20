@@ -35,7 +35,7 @@
             <p class="section-eyebrow">Directory</p>
             <h3 class="workspace-card__title">All clients</h3>
           </div>
-          <ion-button fill="outline" class="surface-button" (click)="openCreate()">Add client</ion-button>
+          <ion-button class="page-create-button" (click)="openCreate()"><ion-icon slot="start" [icon]="addIcon"></ion-icon>New</ion-button>
         </div>
 
         <div class="collection" *ngIf="facade.clients().length; else emptyState">
@@ -46,8 +46,8 @@
             </div>
             <div class="collection-item__actions">
               <span class="collection-item__badge">{{ client.status }}</span>
-              <ion-button size="small" fill="clear" (click)="openEdit(client)">Edit</ion-button>
-              <ion-button size="small" fill="clear" color="danger" (click)="facade.remove(client.id)">Delete</ion-button>
+              <ion-button size="small" fill="clear" class="icon-action" (click)="openEdit(client)"><ion-icon slot="icon-only" [icon]="editIcon"></ion-icon></ion-button>
+              <ion-button size="small" fill="clear" color="danger" class="icon-action" (click)="facade.remove(client.id)"><ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon></ion-button>
             </div>
           </div>
         </div>
@@ -92,3 +92,4 @@
     </ng-template>
   </ion-modal>
 </ion-content>
+

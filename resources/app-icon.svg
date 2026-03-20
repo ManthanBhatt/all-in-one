@@ -1,15 +1,26 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="124" fill="#0A1118"/>
-  <rect x="28" y="28" width="456" height="456" rx="108" fill="url(#panel)" stroke="rgba(255,255,255,0.08)"/>
-  <path d="M144 176C144 158.327 158.327 144 176 144H256C316.752 144 366 193.248 366 254C366 314.752 316.752 364 256 364H176C158.327 364 144 349.673 144 332V176Z" fill="#111C25"/>
-  <path d="M196 204H250C279.823 204 304 228.177 304 258C304 287.823 279.823 312 250 312H196V204Z" fill="#F0C566"/>
-  <path d="M196 258H272" stroke="#0E1821" stroke-width="22" stroke-linecap="round"/>
-  <circle cx="336" cy="180" r="34" fill="#FF7A59"/>
-  <circle cx="336" cy="336" r="22" fill="#37C3B6"/>
   <defs>
-    <linearGradient id="panel" x1="72" y1="56" x2="458" y2="470" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#13212D"/>
-      <stop offset="1" stop-color="#133D40"/>
+    <linearGradient id="essentialsBg" x1="76" y1="52" x2="430" y2="452" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#121826" />
+      <stop offset="0.58" stop-color="#0A0F17" />
+      <stop offset="1" stop-color="#05070B" />
+    </linearGradient>
+    <linearGradient id="essentialsAccent" x1="138" y1="112" x2="380" y2="388" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC" />
+      <stop offset="0.52" stop-color="#CFFFE7" />
+      <stop offset="1" stop-color="#7CF2C6" />
+    </linearGradient>
+    <linearGradient id="essentialsGlow" x1="334" y1="118" x2="390" y2="178" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7CF2C6" />
+      <stop offset="1" stop-color="#30C48D" />
     </linearGradient>
   </defs>
+  <rect width="512" height="512" rx="144" fill="#020407"/>
+  <rect x="58" y="54" width="396" height="396" rx="116" fill="url(#essentialsBg)"/>
+  <rect x="58.75" y="54.75" width="394.5" height="394.5" rx="115.25" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  <path d="M174 148C174 131.431 187.431 118 204 118H356C364.837 118 372 125.163 372 134C372 142.837 364.837 150 356 150H214V228H333C341.837 228 349 235.163 349 244C349 252.837 341.837 260 333 260H214V362H360C368.837 362 376 369.163 376 378C376 386.837 368.837 394 360 394H204C187.431 394 174 380.569 174 364V148Z" fill="url(#essentialsAccent)"/>
+  <path d="M214 182H336C344.837 182 352 189.163 352 198C352 206.837 344.837 214 336 214H214V182Z" fill="#081019" fill-opacity="0.92"/>
+  <path d="M214 292H318C326.837 292 334 299.163 334 308C334 316.837 326.837 324 318 324H214V292Z" fill="#081019" fill-opacity="0.92"/>
+  <circle cx="360" cy="146" r="18" fill="url(#essentialsGlow)"/>
+  <circle cx="360" cy="146" r="31" stroke="#7CF2C6" stroke-opacity="0.22" stroke-width="10"/>
 </svg>

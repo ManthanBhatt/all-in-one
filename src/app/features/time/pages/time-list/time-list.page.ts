@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+
+import { addOutline, createOutline, trashOutline } from 'ionicons/icons';
 
 import { TimeEntry } from '../../../../core/models/domain.models';
 import { TimeFacade } from '../../time.facade';
@@ -11,10 +14,15 @@ import { TimeFacade } from '../../time.facade';
   templateUrl: './time-list.page.html',
   styleUrls: ['./time-list.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonModal, IonMenuButton, IonTitle, IonToolbar],
+  imports: [CommonModule, FormsModule, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonMenuButton, IonTitle, IonToolbar],
 })
 export class TimeListPage implements OnInit {
   readonly facade = inject(TimeFacade);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly addIcon = addOutline;
+  readonly editIcon = createOutline;
+  readonly deleteIcon = trashOutline;
   readonly description = signal('');
   readonly startedAt = signal(this.defaultStartedAt());
   readonly endedAt = signal(this.defaultEndedAt());
@@ -23,6 +31,9 @@ export class TimeListPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.facade.load();
+    this.route.queryParamMap.subscribe((params) => {
+      void this.handleRouteIntent(params.get('focus'), params.get('edit') === '1');
+    });
   }
 
   openCreate(): void {
@@ -60,6 +71,28 @@ export class TimeListPage implements OnInit {
     this.closeModal();
   }
 
+  private async handleRouteIntent(focusId: string | null, shouldEdit: boolean): Promise<void> {
+    if (!focusId) {
+      return;
+    }
+
+    const entry = this.facade.entries().find((item) => item.id === focusId);
+    if (entry && shouldEdit) {
+      this.openEdit(entry);
+    }
+
+    await this.clearRouteIntent();
+  }
+
+  private async clearRouteIntent(): Promise<void> {
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { focus: null, edit: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
   private resetForm(): void {
     this.editingId.set(null);
     this.description.set('');
@@ -85,3 +118,4 @@ export class TimeListPage implements OnInit {
     return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 16);
   }
 }
+

@@ -6,6 +6,12 @@
     <ion-title>Projects</ion-title>
   </ion-toolbar>
   <ion-toolbar class="search-toolbar">
+    <ion-buttons slot="end">
+      <ion-button class="page-create-button" (click)="openCreate()" [disabled]="!clientsFacade.clients().length">
+        <ion-icon slot="start" [icon]="addIcon"></ion-icon>
+        New
+      </ion-button>
+    </ion-buttons>
     <ion-searchbar 
       [value]="facade.searchQuery()" 
       (ionInput)="facade.searchQuery.set($any($event).target.value ?? '')" 
@@ -66,13 +72,21 @@
 
         <div class="page-actions">
           <ion-button fill="outline" class="surface-button" [routerLink]="'/app/tasks'">Show more</ion-button>
-          <ion-button fill="clear" (click)="openEdit(project)">Edit</ion-button>
-          <ion-button fill="clear" color="danger" (click)="facade.remove(project.id)">Delete</ion-button>
+          <ion-button fill="clear" class="icon-action" (click)="openEdit(project)"><ion-icon slot="icon-only" [icon]="editIcon"></ion-icon></ion-button>
+          <ion-button fill="clear" color="danger" class="icon-action" (click)="facade.remove(project.id)"><ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon></ion-button>
         </div>
       </article>
 
       <article class="workspace-card workspace-card--span-12" *ngIf="!facade.projects().length && clientsFacade.clients().length">
-        <div class="empty-state">No projects yet.</div>
+        <div class="empty-state">
+          No projects yet.
+          <div class="page-actions">
+            <ion-button class="page-create-button page-create-button--large" (click)="openCreate()">
+              <ion-icon slot="start" [icon]="addIcon"></ion-icon>
+              New project
+            </ion-button>
+          </div>
+        </div>
       </article>
     </section>
   </div>
@@ -116,3 +130,5 @@
     </ng-template>
   </ion-modal>
 </ion-content>
+
+

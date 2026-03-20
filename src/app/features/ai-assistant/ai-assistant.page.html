@@ -1,0 +1,167 @@
+﻿<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>JARVIS</ion-title>
+    <ion-buttons slot="end">
+      <button class="icon-control" (click)="createNewChat()">
+        <ion-icon name="add-outline"></ion-icon>
+      </button>
+      <button class="icon-control" (click)="showHistory = true">
+        <ion-icon name="time-outline"></ion-icon>
+      </button>
+      <button class="icon-control brain-control" (click)="showBrainSwitcher = true">
+        <ion-icon name="hardware-chip-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #content [fullscreen]="true">
+  <div class="workspace-page assistant-page">
+    <div class="chat-viewport">
+      <div class="message-list" *ngIf="isModelLoaded; else initOverlay">
+        <div class="chat-quick-questions" *ngIf="quickQuestions.length">
+          <button *ngFor="let question of quickQuestions" type="button" class="chat-quick-questions__chip" (click)="quickCommand(question)">
+            {{ question }}
+          </button>
+        </div>
+
+        <div *ngFor="let msg of activeMessages" class="message-item" [ngClass]="msg.role">
+          <div class="message-bubble">
+            <p>{{ msg.content }}</p>
+            <button *ngIf="msg.entityPreview as preview" class="assistant-entity-card" (click)="openEntityPreview(preview)">
+              <div class="assistant-entity-card__top">
+                <span class="assistant-entity-card__eyebrow">{{ preview.actionLabel }}</span>
+                <span class="assistant-entity-card__badge" *ngIf="preview.badge">{{ preview.badge }}</span>
+              </div>
+              <p class="assistant-entity-card__title">{{ preview.title }}</p>
+              <p class="assistant-entity-card__meta" *ngIf="preview.subtitle">{{ preview.subtitle }}</p>
+            </button>
+            <div class="message-footer" *ngIf="msg.actionPerformed">
+              <span class="action-badge">Protocol Executed</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading" class="message-item assistant">
+          <div class="message-bubble">
+            <div class="typing-dots">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeMessages.length === 0 && !isLoading" class="empty-assistant">
+          <div class="empty-card">
+            <ion-icon name="sparkles-outline" class="glow-icon"></ion-icon>
+            <h3>Neural OS Active</h3>
+            <p>I am JARVIS. I can inspect your workspace as well as create records.</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ion-modal [isOpen]="showBrainSwitcher" (didDismiss)="showBrainSwitcher = false" [initialBreakpoint]="0.4" [breakpoints]="[0, 0.4, 0.6]" class="brain-modal">
+    <ng-template>
+      <div class="brain-drawer">
+        <div class="drawer-header">
+          <h3>Neural Core</h3>
+          <ion-button fill="clear" size="small" routerLink="/app/ai-models" (click)="showBrainSwitcher = false">Model Hub</ion-button>
+        </div>
+        <div class="model-selection">
+          <div 
+            *ngFor="let model of availableModels" 
+            class="brain-item" 
+            [class.active]="model.id === selectedModelId"
+            (click)="switchBrain(model.id)">
+            <div class="brain-info">
+              <p class="brain-name">{{ model.name }}</p>
+              <p class="brain-meta">{{ model.sizeMB }}MB • RAM: {{ model.ramRequiredGB }}GB</p>
+            </div>
+            <ion-icon name="checkmark-circle" *ngIf="model.id === selectedModelId" color="primary"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+  <ng-template #initOverlay>
+    <div class="init-container">
+      <article class="workspace-card init-card">
+        <div class="init-icon-wrap">
+          <ion-icon name="sparkles-outline" class="glow-icon-large"></ion-icon>
+        </div>
+        <h3 class="workspace-card__title">{{ overlayTitle }}</h3>
+        <p class="workspace-card__hint">{{ overlaySubtitle }}</p>
+
+        <div class="init-actions" *ngIf="downloadState$ | async as state">
+          <div *ngIf="state.status === 'downloading'" class="init-progress">
+            <div class="progress-track">
+              <div class="progress-bar" [style.width.%]="state.progress"></div>
+            </div>
+            <div class="progress-labels">
+              <span>{{ formatBytes(state.bytesDownloaded) }} / {{ formatBytes(state.totalBytes) }}</span>
+              <span>{{ state.progress }}%</span>
+            </div>
+          </div>
+
+          <ion-button 
+            *ngIf="state.status === 'pending' || state.status === 'error' || state.status === 'completed'" 
+            expand="block"
+            class="surface-button main-init-btn"
+            (click)="initializeEngine()" 
+            [disabled]="isLoading">
+            <ion-icon [name]="state.status === 'completed' ? 'sparkles-outline' : 'download-outline'" slot="start"></ion-icon>
+            {{ state.status === 'completed' ? 'Initialize Engine' : 'Download & Initialize' }}
+          </ion-button>
+        </div>
+      </article>
+    </div>
+  </ng-template>
+
+  <ion-modal [isOpen]="showHistory" (didDismiss)="showHistory = false" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8]" class="history-modal">
+    <ng-template>
+      <div class="history-drawer">
+        <div class="drawer-header">
+          <h3>Chat History</h3>
+          <button class="close-drawer" (click)="showHistory = false">Close</button>
+        </div>
+        <div class="session-list">
+          <div *ngFor="let session of sessions$ | async" class="session-item" [class.active]="session.id === activeSessionId" (click)="selectSession(session.id)">
+            <div class="session-info">
+              <p class="session-title">{{ session.title }}</p>
+              <p class="session-date">{{ session.updatedAt | date:'shortDate' }}</p>
+            </div>
+            <button class="delete-btn" (click)="deleteSession($event, session.id)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>
+
+<ion-footer *ngIf="isModelLoaded" class="assistant-footer ion-no-border">
+  <ion-toolbar class="input-toolbar">
+    <div class="input-container">
+      <textarea
+        [(ngModel)]="userInput" 
+        placeholder="Ask about your workspace or request an action..."
+        [rows]="4"
+        [disabled]="isLoading"
+        (keyup.enter)="sendMessage()"
+        class="custom-textarea"
+      ></textarea>
+      <button class="send-btn" (click)="sendMessage()" [disabled]="!userInput.trim() || isLoading">
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
+
+

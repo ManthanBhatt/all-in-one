@@ -1,0 +1,75 @@
+﻿<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>AI Model Hub</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="workspace-page">
+    <section class="workspace-grid">
+      <article class="workspace-card workspace-card--span-12">
+        <div class="workspace-card__top">
+          <div>
+            <p class="section-eyebrow">Local Intelligence</p>
+            <h3 class="workspace-card__title">AI Model Hub</h3>
+            <p class="workspace-card__hint">Curated GGUF models optimized for mobile inference. No cloud required.</p>
+          </div>
+        </div>
+
+        <div class="collection">
+          <div *ngFor="let model of models" class="collection-item model-item">
+            <div class="model-info">
+              <div class="model-info__top">
+                <div>
+                  <p class="collection-item__title">{{ model.name }}</p>
+                  <p class="collection-item__meta">{{ model.sizeMB }}MB • RAM: {{ model.ramRequiredGB }}GB</p>
+                </div>
+                <span class="collection-item__badge collection-item__badge--success" *ngIf="isActive(model.id)">Active</span>
+              </div>
+              <p class="model-desc">{{ model.description }}</p>
+              <div class="model-tags">
+                <span *ngFor="let tag of model.tags" class="tag-pill">{{ tag }}</span>
+              </div>
+            </div>
+
+            <div class="model-actions" *ngIf="getDownloadState(model.id) | async as state">
+              <div class="page-actions">
+                <ion-button fill="outline" class="surface-button" *ngIf="!isDownloaded(model.id)" (click)="download(model)">
+                  <ion-icon name="download-outline" slot="start"></ion-icon>
+                  Download
+                </ion-button>
+                <ion-button class="page-create-button" *ngIf="isDownloaded(model.id)" (click)="useModel(model.id)">
+                  <ion-icon name="hardware-chip-outline" slot="start"></ion-icon>
+                  {{ isActive(model.id) ? 'Using now' : 'Use model' }}
+                </ion-button>
+              </div>
+
+              <div *ngIf="state.status === 'downloading'" class="progress-wrap">
+                <div class="progress-track">
+                  <div class="progress-bar" [style.width.%]="state.progress"></div>
+                </div>
+                <div class="progress-meta">
+                  <span>{{ formatBytes(state.bytesDownloaded) }} / {{ formatBytes(state.totalBytes) }}</span>
+                  <span>{{ state.progress }}%</span>
+                </div>
+              </div>
+
+              <div *ngIf="isDownloaded(model.id)" class="ready-state">
+                <div class="status-indicator">
+                  <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                  <span>Downloaded</span>
+                </div>
+                <ion-button fill="clear" color="danger" (click)="delete(model.id)">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+</ion-content>

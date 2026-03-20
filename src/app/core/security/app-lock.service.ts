@@ -93,9 +93,9 @@ export class AppLockService {
       }
 
       await BiometricAuth.authenticate({
-        reason: 'Unlock Freelancer OS',
+        reason: 'Unlock Essentials',
         allowDeviceCredential: true,
-        androidTitle: 'Unlock Freelancer OS',
+        androidTitle: 'Unlock Essentials',
         androidSubtitle: 'Use your device security',
         cancelTitle: 'Cancel',
       });
@@ -167,3 +167,4 @@ export class AppLockService {
     }
   }
 }
+

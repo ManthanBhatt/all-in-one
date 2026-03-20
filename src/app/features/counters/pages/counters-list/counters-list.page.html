@@ -1,14 +1,20 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Counters</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="counter-create-button" fill="solid" (click)="openCreate()">
+        <ion-icon slot="start" [icon]="createAccentIcon"></ion-icon>
+        New
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
   <ion-toolbar class="search-toolbar">
-    <ion-searchbar 
-      [value]="facade.searchQuery()" 
-      (ionInput)="facade.searchQuery.set($any($event).target.value ?? '')" 
+    <ion-searchbar
+      [value]="facade.searchQuery()"
+      (ionInput)="facade.searchQuery.set($any($event).target.value ?? '')"
       placeholder="Search counters..."
       class="custom-searchbar"
     ></ion-searchbar>
@@ -16,57 +22,61 @@
 </ion-header>
 
 <ion-content>
-  <div class="workspace-page">
-    <!-- <section class="workspace-hero">
-      <div>
-        <p class="workspace-hero__eyebrow">Modules</p>
-        <h1>Tap counters</h1>
-        <p>Simple, ultra-fast counters for anything you need to track with a single tap.</p>
-      </div>
-      <div class="workspace-hero__meta">
-        <div class="hero-highlight">
-          <span>Active counters</span>
-          <strong>{{ facade.counters().length }}</strong>
+  <div class="workspace-page counter-page">
+    <section class="workspace-grid workspace-grid--compact">
+      <article class="workspace-card workspace-card--span-12 counter-overview">
+        <div>
+          <p class="section-eyebrow">Counters</p>
+          <h2 class="workspace-card__title">Count anything with one clean tap surface.</h2>
+          <p class="workspace-card__hint">Fast counters for reps, habits, leads, sets, and anything that benefits from visible momentum.</p>
         </div>
-      </div>
-    </section> -->
+        <div class="counter-overview__meta">
+          <div>
+            <span>Total</span>
+            <strong>{{ facade.counters().length }}</strong>
+          </div>
+        </div>
+      </article>
 
-    <div class="workspace-grid">
-      <div class="workspace-card" *ngFor="let counter of facade.counters()" (click)="goToCounter(counter.id)">
-        <div class="workspace-card__top">
+      <article class="workspace-card workspace-card--span-4 counter-card" *ngFor="let counter of facade.counters()" (click)="goToCounter(counter.id)">
+        <div class="counter-card__top">
           <div>
             <p class="section-eyebrow">Counter</p>
             <h3 class="workspace-card__title">{{ counter.name }}</h3>
             <p class="workspace-card__hint">Created {{ counter.created_at | date:'mediumDate' }}</p>
           </div>
-          <div class="workspace-card__value">{{ counter.current_value }}</div>
+          <div class="counter-card__value">{{ counter.current_value }}</div>
         </div>
-        <div class="page-actions">
-          <ion-button fill="clear" color="medium" (click)="deleteCounter(counter.id, $event)">
-            <ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon>
-          </ion-button>
-          <ion-button fill="clear" color="primary" (click)="openEdit(counter, $event)">
+
+        <div class="counter-card__progress" *ngIf="completionRatio(counter) as ratio">
+          <div class="counter-card__progress-bar">
+            <span [style.width.%]="ratio"></span>
+          </div>
+          <small>{{ ratio }}% of {{ counter.target_value }}</small>
+        </div>
+
+        <div class="counter-card__actions">
+          <ion-button fill="clear" color="medium" (click)="openEdit(counter, $event)">
             <ion-icon slot="icon-only" [icon]="editIcon"></ion-icon>
           </ion-button>
-          <ion-button fill="outline" class="surface-button">
-            Open
-            <ion-icon slot="end" [icon]="chevronIcon"></ion-icon>
+          <ion-button fill="clear" color="danger" (click)="deleteCounter(counter.id, $event)">
+            <ion-icon slot="icon-only" [icon]="deleteIcon"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" color="light" (click)="$event.stopPropagation(); goToCounter(counter.id)">
+            <ion-icon slot="icon-only" [icon]="chevronIcon"></ion-icon>
           </ion-button>
         </div>
-      </div>
+      </article>
 
-      <div class="empty-state workspace-card" *ngIf="facade.counters().length === 0">
-        <p>You haven't created any counters yet.</p>
-        <ion-button (click)="openCreate()" fill="outline">Create your first counter</ion-button>
-      </div>
-    </div>
+      <article class="workspace-card workspace-card--span-12 empty-state" *ngIf="facade.counters().length === 0">
+        <p>No counters yet. Start one for anything you want to track repeatedly.</p>
+        <ion-button class="counter-create-button counter-create-button--large" fill="solid" (click)="openCreate()">
+          <ion-icon slot="start" [icon]="createAccentIcon"></ion-icon>
+          Create counter
+        </ion-button>
+      </article>
+    </section>
   </div>
-
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="openCreate()">
-      <ion-icon [icon]="addIcon"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 
   <ion-modal [isOpen]="isModalOpen()" (didDismiss)="closeModal()" class="workspace-modal">
     <ng-template>
@@ -104,7 +114,7 @@
               </ion-button>
             </div>
 
-            <p class="workspace-card__hint" *ngIf="errorMessage()" color="danger">{{ errorMessage() }}</p>
+            <p class="workspace-card__hint" *ngIf="errorMessage()">{{ errorMessage() }}</p>
           </div>
         </div>
       </div>

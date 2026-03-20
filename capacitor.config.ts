@@ -1,12 +1,12 @@
-﻿import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.manthan.freelanceros',
-  appName: 'Freelancer OS',
+  appName: 'Essentials',
   webDir: 'www',
   plugins: {
     LocalNotifications: {
-      iconColor: '#FF7A59',
+      iconColor: '#ffffff',
     },
   },
 };

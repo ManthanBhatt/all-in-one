@@ -69,6 +69,16 @@ export const routes: Routes = [
         canActivate: [featureGuard('counters')],
       },
       {
+        path: 'ai-assistant',
+        loadComponent: () => import('./features/ai-assistant/ai-assistant.page').then((m) => m.AIAssistantPage),
+        canActivate: [featureGuard('ai-assistant')],
+      },
+      {
+        path: 'ai-models',
+        loadComponent: () => import('./features/ai-models/models.page').then((m) => m.AIModelsPage),
+        canActivate: [featureGuard('ai-models')],
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./features/settings/pages/settings/settings.page').then((m) => m.SettingsPage),
       },

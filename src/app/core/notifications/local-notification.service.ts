@@ -1,24 +1,34 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { Capacitor, PermissionState } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 import { Reminder, Task } from '../models/domain.models';
+import { EntityNavigationService } from '../services/entity-navigation.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalNotificationService {
+  private readonly navigation = inject(EntityNavigationService);
+  private readonly zone = inject(NgZone);
+
   private readonly webTimers = new Map<string, number>();
   private channelReady = false;
+  private listenersReady = false;
+
+  constructor() {
+    void this.initializeInteractionListeners();
+  }
 
   async scheduleReminder(reminder: Reminder): Promise<void> {
+    const target = this.navigation.getTarget('reminders', reminder.id);
     await this.scheduleAt({
       key: `reminder:${reminder.id}`,
       title: reminder.title,
-      body: 'Reminder from Freelancer OS',
+      body: 'Reminder from Essentials',
       atIso: reminder.remind_at,
       nativeId: this.notificationId(`reminder:${reminder.id}`),
-      extra: { reminderId: reminder.id, type: 'reminder' },
+      extra: { reminderId: reminder.id, entityType: 'reminders', entityId: reminder.id, route: target.route, queryParams: target.queryParams },
     });
   }
 
@@ -32,13 +42,14 @@ export class LocalNotificationService {
       return;
     }
 
+    const target = this.navigation.getTarget('tasks', task.id);
     await this.scheduleAt({
       key: `task:${task.id}`,
       title: task.title,
-      body: 'Task due now in Freelancer OS',
+      body: 'Task due now in Essentials',
       atIso: task.due_at,
       nativeId: this.notificationId(`task:${task.id}`),
-      extra: { taskId: task.id, type: 'task' },
+      extra: { taskId: task.id, entityType: 'tasks', entityId: task.id, route: target.route, queryParams: target.queryParams },
     });
   }
 
@@ -155,10 +166,16 @@ export class LocalNotificationService {
 
     const delay = scheduledAt.getTime() - Date.now();
     const timerId = window.setTimeout(() => {
-      new Notification(input.title, {
+      const liveNotification = new Notification(input.title, {
         body: input.body,
         tag: input.key,
+        data: input.extra,
       });
+      liveNotification.onclick = () => {
+        window.focus();
+        void this.handleNavigationExtra(liveNotification.data as Record<string, unknown> | undefined);
+        liveNotification.close();
+      };
       this.webTimers.delete(input.key);
     }, delay);
 
@@ -183,6 +200,30 @@ export class LocalNotificationService {
     } catch {
       return;
     }
+  }
+
+  private async initializeInteractionListeners(): Promise<void> {
+    if (!Capacitor.isNativePlatform() || this.listenersReady) {
+      return;
+    }
+
+    await LocalNotifications.addListener('localNotificationActionPerformed', (event) => {
+      void this.handleNavigationExtra(event.notification.extra as Record<string, unknown> | undefined);
+    });
+
+    this.listenersReady = true;
+  }
+
+  private async handleNavigationExtra(extra?: Record<string, unknown>): Promise<void> {
+    const entityType = typeof extra?.['entityType'] === 'string' ? extra['entityType'] : null;
+    const entityId = typeof extra?.['entityId'] === 'string' ? extra['entityId'] : null;
+    if (!entityType || !entityId) {
+      return;
+    }
+
+    this.zone.run(() => {
+      void this.navigation.navigateToEntity(entityType as any, entityId);
+    });
   }
 
   private notificationId(id: string): number {
@@ -210,7 +251,7 @@ export class LocalNotificationService {
     try {
       await LocalNotifications.createChannel({
         id: 'freelancer-os-reminders',
-        name: 'Freelancer OS reminders',
+        name: 'Essentials reminders',
         description: 'Task and reminder alerts',
         importance: 5,
         visibility: 1,
@@ -219,9 +260,9 @@ export class LocalNotificationService {
         lightColor: '#FF7A59',
       });
     } catch {
-      // Channel may already exist.
     }
 
     this.channelReady = true;
   }
 }
+

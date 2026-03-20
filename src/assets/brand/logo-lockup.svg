@@ -1,18 +1,27 @@
 <svg width="820" height="240" viewBox="0 0 820 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="820" height="240" rx="48" fill="#0A1118"/>
-  <rect x="22" y="22" width="196" height="196" rx="44" fill="url(#panel)"/>
-  <path d="M74 80C74 69.5066 82.5066 61 93 61H139C176.555 61 207 91.4446 207 129C207 166.555 176.555 197 139 197H93C82.5066 197 74 188.493 74 178V80Z" fill="#111C25"/>
-  <path d="M106 97H140C159.33 97 175 112.67 175 132C175 151.33 159.33 167 140 167H106V97Z" fill="#F0C566"/>
-  <path d="M106 132H154" stroke="#0E1821" stroke-width="14" stroke-linecap="round"/>
-  <circle cx="184" cy="92" r="16" fill="#FF7A59"/>
-  <circle cx="184" cy="182" r="10" fill="#37C3B6"/>
-  <path d="M268 96H422.96C458.474 96 480.4 115.934 480.4 148.106C480.4 178.994 458.193 198 423.1 198H314.44V152.964H407.7C421.42 152.964 429.78 147.366 429.78 136.672C429.78 126.118 421.42 120.52 407.7 120.52H314.44V198H268V96Z" fill="#F6F8FB"/>
-  <path d="M513.322 198V96H562.542L598.942 156.462L635.482 96H684.702V198H639.252V138.296L610.522 186.542H586.802L558.772 138.436V198H513.322Z" fill="#F6F8FB"/>
-  <path d="M713.01 96H759.16V198H713.01V96ZM713.01 59H759.16V84.2H713.01V59Z" fill="#F0C566"/>
   <defs>
-    <linearGradient id="panel" x1="40" y1="32" x2="206" y2="214" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#13212D"/>
-      <stop offset="1" stop-color="#133D40"/>
+    <linearGradient id="lockupBg" x1="24" y1="20" x2="196" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#121826" />
+      <stop offset="0.58" stop-color="#0A0F17" />
+      <stop offset="1" stop-color="#05070B" />
+    </linearGradient>
+    <linearGradient id="lockupAccent" x1="66" y1="52" x2="170" y2="176" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC" />
+      <stop offset="0.52" stop-color="#CFFFE7" />
+      <stop offset="1" stop-color="#7CF2C6" />
+    </linearGradient>
+    <linearGradient id="lockupGlow" x1="154" y1="64" x2="180" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7CF2C6" />
+      <stop offset="1" stop-color="#30C48D" />
     </linearGradient>
   </defs>
+  <rect width="820" height="240" rx="56" fill="#020407"/>
+  <rect x="24" y="24" width="192" height="192" rx="54" fill="url(#lockupBg)"/>
+  <rect x="24.75" y="24.75" width="190.5" height="190.5" rx="53.25" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  <path d="M78 72C78 64.268 84.268 58 92 58H164C168.418 58 172 61.5817 172 66C172 70.4183 168.418 74 164 74H102V108H150C154.418 108 158 111.582 158 116C158 120.418 154.418 124 150 124H102V166H166C170.418 166 174 169.582 174 174C174 178.418 170.418 182 166 182H92C84.268 182 78 175.732 78 168V72Z" fill="url(#lockupAccent)"/>
+  <path d="M102 86H156C160.418 86 164 89.5817 164 94C164 98.4183 160.418 102 156 102H102V86Z" fill="#081019" fill-opacity="0.92"/>
+  <path d="M102 136H146C150.418 136 154 139.582 154 144C154 148.418 150.418 152 146 152H102V136Z" fill="#081019" fill-opacity="0.92"/>
+  <circle cx="164" cy="72" r="9" fill="url(#lockupGlow)"/>
+  <circle cx="164" cy="72" r="17" stroke="#7CF2C6" stroke-opacity="0.22" stroke-width="6"/>
+  <text x="258" y="145" fill="#F8FAFC" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="74" font-weight="700" letter-spacing="-2.4">Essentials</text>
 </svg>

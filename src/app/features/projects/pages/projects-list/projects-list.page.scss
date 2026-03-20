@@ -1,4 +1,4 @@
-.collection--stack {
+﻿.collection--stack {
   align-content: start;
 }
 
@@ -51,4 +51,15 @@
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 900px) {
+  .project-task-chip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .project-status-row select {
+    min-height: 44px;
+  }
 }
