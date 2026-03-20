@@ -1,6 +1,6 @@
 # Documentation Index
 
-This folder is the project wiki for Freelancer OS.
+This folder is the project wiki for Essentials.
 
 ## Guides
 
@@ -13,3 +13,9 @@ This folder is the project wiki for Freelancer OS.
 1. Codebase Guide
 2. Database Guide
 3. Sync and Security Guide
+
+## What Each Guide Covers
+
+- `codebase.md`: application structure, routing, feature layout, and main runtime layers
+- `database.md`: entity model, local-first persistence shape, and Supabase expectations
+- `sync-security.md`: sync flow, queue behavior, notifications, and app-lock/security boundaries

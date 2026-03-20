@@ -1,15 +1,16 @@
-# Freelancer OS
+# Essentials
 
-Freelancer OS is an offline-first Ionic + Angular + Capacitor workspace for independent developers and agencies. It combines clients, projects, tasks, notes, reminders, time tracking, invoices, sync, and app security into one dark-mode-first hybrid app that runs on web and Android today, with iOS-ready architecture.
+Essentials is an offline-first Ionic + Angular + Capacitor workspace for solo developers, freelancers, and small agencies. It combines client work management, billing, reminders, counters, and an in-app AI assistant into one dark-mode-first hybrid app for web and Android, with iOS-ready architecture.
 
 ## Highlights
 
 - Offline-first local data layer with automatic background sync
 - Supabase authentication and cloud sync target
-- Clients, projects, tasks, notes, reminders, time tracking, and invoices
+- Clients, projects, tasks, notes, reminders, time tracking, invoices, and counters
+- Task workflow board with drag and drop
 - Local notifications for reminders and task due dates
 - Web PIN lock and native biometric/device lock support
-- Drag-and-drop task workflow board
+- AI assistant and AI model hub
 - Android Capacitor project included
 
 ## Stack
@@ -18,17 +19,33 @@ Freelancer OS is an offline-first Ionic + Angular + Capacitor workspace for inde
 - Angular 20
 - Capacitor 8
 - Supabase
-- Capacitor Community SQLite abstraction + browser fallback
-- Capacitor Local Notifications
-- Capacitor Biometric Auth
+- `@capacitor-community/sqlite`
+- `@capacitor/local-notifications`
+- `@aparajita/capacitor-biometric-auth`
+- `localforage`
 
 ## Repository Layout
 
 - `src/`: Angular app
 - `android/`: Android Capacitor project
 - `supabase/`: SQL migrations for Supabase
-- `docs/`: architecture and database wiki
-- `resources/`: brand and icon source assets
+- `docs/`: project wiki and contributor-facing technical docs
+- `resources/`: brand, app icon, and launcher source assets
+
+## Current Modules
+
+- Dashboard
+- Clients
+- Projects
+- Tasks
+- Notes
+- Reminders
+- Time
+- Invoices
+- Counters
+- AI Assistant
+- AI Models
+- Settings
 
 ## Quick Start
 
@@ -42,12 +59,13 @@ npm install
 
 ### 2. Configure Supabase
 
-Add your Supabase project URL and anon key to the Angular environment config.
+Set your Supabase project URL and anon key in the Angular environment files.
 
-The codebase expects:
+The app expects:
+
 - Supabase Auth enabled
 - Row Level Security enabled on user-owned tables
-- migrations in `supabase/migrations/` applied to your project
+- the SQL migrations in `supabase/migrations/` applied to your project
 
 Apply these migrations in order:
 
@@ -63,16 +81,22 @@ ionic serve
 
 Open [http://localhost:8100](http://localhost:8100).
 
-### 4. Run Android
+### 4. Build the web app
+
+```bash
+npm run build
+```
+
+### 5. Run Android
 
 ```bash
 npx cap sync android
 npx cap open android
 ```
 
-### 5. Add iOS later
+### 6. Add iOS later
 
-The codebase is prepared for iOS, but the iOS platform folder is not committed here. On macOS:
+The codebase is structured to support iOS, but the `ios/` platform folder is not committed here. On macOS:
 
 ```bash
 npx cap add ios
@@ -84,9 +108,9 @@ npx cap open ios
 
 ### Auth
 
-- Register a new user from `/auth/register`
+- Register from `/auth/register`
 - Log in with Supabase Auth
-- The app restores your session on refresh
+- Session restore keeps you signed in across refreshes
 
 ### Core workflow
 
@@ -96,7 +120,8 @@ npx cap open ios
 4. Capture notes and reminders
 5. Track time
 6. Generate invoices
-7. Let sync push local changes to Supabase automatically when online
+7. Use counters for anything repetitive you want to track
+8. Let the sync layer push local changes to Supabase automatically when online
 
 ### Notifications
 
@@ -109,28 +134,19 @@ npx cap open ios
 - Web: enable app lock and set a PIN in Settings
 - Mobile: enable app lock and use biometric/device security
 
-## Open Source Docs
+### AI
+
+- Use AI Assistant to query workspace state, create records, and inspect current work
+- Use AI Models to manage the current assistant model selection and download state
+- The current assistant layer is workspace-aware and action-capable, but it is not yet a full on-device LLM runtime
+
+## Documentation
 
 - [Documentation Index](./docs/README.md)
 - [Codebase Guide](./docs/codebase.md)
 - [Database Guide](./docs/database.md)
 - [Sync and Security Guide](./docs/sync-security.md)
 - [Contributing Guide](./CONTRIBUTING.md)
-
-## Current Scope
-
-Implemented:
-- Auth shell and session restore
-- Offline-first CRUD for core modules
-- Auto sync queue and Supabase sync path
-- Notifications and app lock
-- Android support
-
-Planned / evolving:
-- richer conflict resolution UI for invoices
-- expanded reporting and exports
-- iOS platform setup in-repo
-- more detailed test coverage
 
 ## Development Notes
 
@@ -142,6 +158,24 @@ ionic serve
 npm run build
 npx cap sync android
 ```
+
+## Current Scope
+
+Implemented:
+
+- Auth shell and session restore
+- Offline-first CRUD for core modules
+- Automatic sync queue and Supabase sync path
+- Notifications and app lock
+- Android support
+- AI assistant and AI model management UI
+
+Still evolving:
+
+- richer invoice conflict resolution UI
+- more complete AI runtime/inference backend
+- improved automated test coverage
+- iOS platform setup in-repo
 
 ## License
 
